@@ -318,8 +318,10 @@ class ThreeScene {
                 object.rotation.z += object.userData.rotationSpeed.z;
 
                 // Floating movement
-                const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 0.5;
-                object.position.y = object.userData.originalPosition[1] + floatY;
+                if (object.userData.originalPosition && Array.isArray(object.userData.originalPosition)) {
+                    const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 0.5;
+                    object.position.y = object.userData.originalPosition[1] + floatY;
+                }
 
                 // Mouse interaction
                 const mouseInfluence = 0.1;
@@ -354,7 +356,7 @@ class ThreeScene {
                 object.rotation.z += object.userData.rotationSpeed;
                 
                 // Floating movement for smaller yin-yangs
-                if (object.userData.floatSpeed && object.userData.originalPosition) {
+                if (object.userData.floatSpeed && object.userData.originalPosition && Array.isArray(object.userData.originalPosition)) {
                     const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 2;
                     const floatX = Math.cos(time * object.userData.floatSpeed * 0.7 + object.userData.floatOffset) * 1;
                     

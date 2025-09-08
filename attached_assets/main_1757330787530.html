@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M Hilmi | Portfolio Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/Styles.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- Background elements -->
+    <div class="grid-pattern"></div>
+    <div class="floating-circle circle-1"></div>
+    <div class="floating-circle circle-2"></div>
+    <div class="floating-circle circle-3"></div>
+    
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-500">
+        <i class="fas fa-moon dark:hidden"></i>
+        <i class="fas fa-sun hidden dark:block"></i>
+    </button>
+    
+
+    <!-- Blob Background Elements -->
+    <div class="blob w-64 h-64 bg-blue-500 rounded-full absolute top-1/4 -left-16 animate-float"></div>
+    <div class="blob w-72 h-72 bg-purple-500 rounded-full absolute bottom-1/4 -right-20 animate-float-reverse"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md z-40 shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 py-3">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold gradient-text">MHFADEV</a>
+                <div class="hidden md:flex space-x-6 lg:space-x-8">
+                    <a href="#home" class="nav-link px-3 py-2">Beranda</a>
+                    <a href="#about" class="nav-link px-3 py-2">Tentang</a>
+                    <a href="#skills" class="nav-link px-3 py-2">Keahlian</a>
+                    <a href="#experience" class="nav-link px-3 py-2">Pengalaman</a>
+                    <a href="#projects" class="nav-link px-3 py-2">Proyek</a>
+                    <a href="#contact" class="nav-link px-3 py-2">Kontak</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-gray-700 dark:text-gray-200 p-2">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 px-4 py-3 shadow-lg">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="nav-link px-3 py-2">Beranda</a>
+                <a href="#about" class="nav-link px-3 py-2">Tentang</a>
+                <a href="#skills" class="nav-link px-3 py-2">Keahlian</a>
+                <a href="#experience" class="nav-link px-3 py-2">Pengalaman</a>
+                <a href="#projects" class="nav-link px-3 py-2">Proyek</a>
+                <a href="#contact" class="nav-link px-3 py-2">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center pt-16 section-padding">
+        <div class="container mx-auto px-4 sm:px-6 py-12 md:py-20">
+            <div class="max-w-4xl mx-auto hero-card p-8 sm:p-10 md:p-12 animate-fade-in">
+                <div class="hero-badge animate-text-focus-in" style="animation-delay: 0.2s;">HALO,</div>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight animate-text-focus-in" style="animation-delay: 0.4s;">
+                    I AM <br> <b><span class="hero-gradient-text">M. HILMI F.ADI</span></b>
+                </h1>
+                <div class="space-y-4 text-gray-600 dark:text-gray-300 text-base sm:text-lg md:text-xl animate-fade-in" style="animation-delay: 0.6s;">
+                    <p>Saya adalah pelajar SMK jurusan TJKT yang berfokus pada frontend development, sambil terus memperdalam backend untuk menjadi seorang full-stack web developer.</p>
+                    <p>Selain mengembangkan website, saya juga memiliki ketertarikan di bidang IT Support, mulai dari penanganan hardware, software, hingga troubleshooting dasar.</p>
+                    <p>Tujuan saya adalah menguasai keterampilan pengembangan web dan dukungan teknis, sehingga dapat memberikan solusi teknologi yang cepat, tepat, dan profesional.</p>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-4 animate-fade-in" style="animation-delay: 0.8s;">
+                    <a href="#contact" class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:opacity-90 transition-all duration-300">
+                        Hubungi Saya
+                    </a>
+                    <a href="#projects" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300">
+                        Lihat Proyek
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-16 sm:py-20 bg-gray-100 dark:bg-gray-800 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 sm:mb-12">Tentang <span class="gradient-text">Saya</span></h2>
+            <div class="flex flex-col md:flex-row items-center mobile-stack">
+                <div class="md:w-1/3 mb-8 md:mb-0 flex justify-center">
+                    <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
+                        <img src="https://raw.githubusercontent.com/Hilmi12309/aseet/refs/heads/main/foto/1000558609%20(1).png" 
+                             alt="M Hilmi" 
+                             class="w-full h-full object-cover">
+                    </div>
+                </div>
+                <div class="md:w-2/3 md:pl-8 lg:pl-12 about-content mobile-center md:text-left">
+                    <h3 class="text-2xl font-semibold mb-4">Siapa Saya?</h3>
+                    <p class="mb-6 text-gray-600 dark:text-gray-300">
+                        Saya M. Hilmi F. Adi, seorang pelajar yang berdedikasi dengan minat besar di bidang teknologi. Saat ini, saya berfokus untuk menjadi full-stack web developer sekaligus mendapatkan pengalaman sebagai spesialis IT Support. Perjalanan saya di dunia teknologi didorong oleh rasa ingin tahu dan keinginan untuk memecahkan masalah secara kreatif.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">Pendidikan</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Saat ini saya menempuh pendidikan di SMK dengan fokus pada ilmu komputer dan teknologi informasi.
+                        </p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">Organisasi ICT</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Anggota aktif organisasi ICT sekolah, mengerjakan pemeliharaan teknologi termasuk sistem listrik dan jaringan.</p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">Pengembangan Web</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Frontend developer yang sedang memperluas ke pengembangan backend untuk menjadi full-stack.</p>
+                        </div>
+                        <div class="bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <h4 class="font-medium mb-2">IT Support</h4>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">Memberikan dukungan teknis dan troubleshooting untuk berbagai sistem dan jaringan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-16 sm:py-20 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 sm:mb-12">Keahlian <span class="gradient-text">Saya</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-10 sm:mb-12">
+                <!-- Web Development Skills -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-code text-blue-500 dark:text-blue-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">Pengembangan Web</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>HTML/CSS</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>JavaScript</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>React</span>
+                                <span>54%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 54%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Node.js</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IT Support Skills -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-5 sm:p-6 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
+                            <i class="fas fa-desktop text-purple-500 dark:text-purple-300"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold">IT Support</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Perbaikan Hardware</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Pemeliharaan Jaringan</span>
+                                <span>25%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Administrasi Sistem</span>
+                                <span>20%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 20%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span>Dukungan Teknis</span>
+                                <span>50%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Skills -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-white-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                        <i class="fab fa-html5 text-[##E34F26] dark:text-[#E34F26] text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">HTML5</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                        <i class="fab fa-css3-alt text-blue-500 dark:text-blue-300 text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">CSS3</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center mb-2">
+                        <i class="fab fa-js text-yellow-500 dark:text-yellow-300 text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">JavaScript</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                        <i class="fab fa-react text-blue-500 dark:text-blue-300 text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">React.js</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-2">
+                        <i class="fab fa-node-js text-green-500 dark:text-green-300 text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">Node.js</span>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-3 sm:p-4 flex flex-col items-center shadow-md card-hover">
+                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2">
+                        <i class="fas fa-wifi text-gray-500 dark:text-gray-300 text-lg sm:text-xl"></i>
+                    </div>
+                    <span class="text-xs sm:text-sm font-medium">Jaringan</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-16 sm:py-20 bg-gray-100 dark:bg-gray-800 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <classqass="text-3xl font-bold text-center mb-10 sm:mb-12">Pengalaman <span class="gradient-text">Saya</span></h2>
+            
+            <div class="relative">
+                <!-- Timeline -->
+                <div class="space-y-6 sm:space-y-8 pl-6 sm:pl-8">
+                    <!-- School ICT Organization -->
+                    <div class="relative timeline-item">
+                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-5 sm:p-6 card-hover">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                                    <i class="fas fa-network-wired text-blue-500 dark:text-blue-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Divisi TIK Sekolah</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Anggota Aktif | TJKT (Teknik Jaringan Komputer & Telekomunikasi)</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Tanggung Jawab Utama -->
+                            <div class="mb-4">
+                                <h4 class="font-medium text-lg mb-2 text-blue-500 dark:text-blue-400">Tanggung Jawab Utama:</h4>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+                                    <li>Manajemen infrastruktur teknologi (hardware & software)</li>
+                                    <li>Dukungan teknis untuk guru dan siswa</li>
+                                    <li>Kolaborasi proyek teknologi sekolah</li>
+                                    <li>Penguasaan komponen TIK sesuai kurikulum TJKT</li>
+                                </ul>
+                            </div>
+                            
+                            <!-- Keterampilan -->
+                            <div>
+                                <h4 class="font-medium text-lg mb-2 text-purple-500 dark:text-purple-400">Keterampilan:</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">Perawatan Hardware</span>
+                                    <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">Troubleshooting</span>
+                                    <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs">Kerja Tim</span>
+                                    <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs">Komunikasi Teknis</span>
+                                </div>
+                            </div>
+                            
+                            <span class="text-sm text-gray-500 dark:text-gray-400 mt-4 inline-block">2024 - Sekarang</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Web Development -->
+                    <div class="relative timeline-item">
+                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-5 sm:p-6 card-hover">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                                    <i class="fas fa-code text-blue-500 dark:text-blue-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Web Developer</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Freelance & Proyek Pribadi</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base">
+                                Mengembangkan website yang berfokus pada pengembangan frontend sambil memperluas pengetahuan dalam teknologi backend untuk menjadi full-stack developer.
+                            </p>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">202 - Sekarang</span>
+                        </div>
+                    </div>
+                    
+                    <!-- IT Support -->
+                    <div class="relative timeline-item">
+                        <div class="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-5 sm:p-6 card-hover">
+                            <div class="flex items-center mb-2">
+                                <div class="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900 flex items-center justify-center mr-4">
+                                    <i class="fas fa-desktop text-green-500 dark:text-green-300"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-lg">Spesialis IT Support</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Sekolah & Komunitas</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 mb-2 text-sm sm:text-base">
+                                Memberikan dukungan teknis untuk masalah hardware dan software, dan troubleshooting jaringan sekolah yang sedang bermasalah.
+                            </p>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">2024 - Sekarang</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-16 sm:py-20 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 sm:mb-12">Proyek <span class="gradient-text">Saya</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+                <!-- Project 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="h-40 sm:h-48 bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center">
+                        <i class="fas fa-ring text-white text-5xl sm:text-6xl"></i>
+                    </div>
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-semibold mb-2">Surat undangan online</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                            Undangan Online biasanya untuk masyarakat yang ingin membuat acar seperti pernikahan,sunatan, dll
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">HTML5</span>
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">CSS3</span>
+                            <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-xs">JavaScript</span>
+                        </div>
+                        <div class="flex space-x-3 text-sm sm:text-base">
+                            <a href="#" class="text-blue-500 dark:text-blue-400 hover:underline">Lihat Proyek</a>
+                            <a href="#" class="text-gray-500 dark:text-gray-400 hover:underline">Lihat Kode</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="h-40 sm:h-48 bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center">
+                        <i class="fas fa-gamepad text-white text-5xl sm:text-6xl"></i>
+                    </div>
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-semibold mb-2">Game berbasis Web</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                          Project saat saya bosan dan membuat game yang berbasis website dan tidak pernah dilanjutkan lagi untuk update nya
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">HTML5</span>
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">CSS3</span>
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">React</span>
+                        </div>
+                        <div class="flex space-x-3 text-sm sm:text-base">
+                            <a href="#" class="text-purple-500 dark:text-purple-400 hover:underline">Lihat Proyek</a>
+                            <a href="#" class="text-gray-500 dark:text-gray-400 hover:underline">Lihat Kode</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Project 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+                    <div class="h-40 sm:h-48 bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center">
+                        <i class="fas fa-desktop text-white text-5xl sm:text-6xl"></i>
+                        <i class="fas fa-tools text-white text-3xl absolute -bottom-4 left-1/2 transform -translate-x-1/2"></i>
+                    </div>
+                    <div class="p-5 sm:p-6">
+                        <h3 class="text-lg sm:text-xl font-semibold mb-2">IT Support</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                            IT support yang masih kurang berpengalaman, untuk saat ini hanya bisa maintenance sebuah software,hardware,dan sebuah website
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">Software</span>
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs">Hardware</span>
+                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs">Website</span>
+                        </div>
+                        <div class="flex space-x-3 text-sm sm:text-base">
+                            <a href="#" class="text-green-500 dark:text-green-400 hover:underline">Lihat Proyek</a>
+                            <a href="#" class="text-gray-500 dark:text-gray-400 hover:underline">Lihat Kode</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10 sm:mt-12">
+                <a href="#" class="px-5 sm:px-6 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 inline-flex items-center text-sm sm:text-base">
+                    Lihat Semua Proyek <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bukti Aktivitas Section -->
+    <section id="activities" class="py-16 sm:py-20 bg-gray-100 dark:bg-gray-800 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 sm:mb-12">Bukti <span class="gradient-text">Aktivitas</span></h2>
+            
+            <div class="mb-12 sm:mb-16">
+                <h3 class="text-xl sm:text-2xl font-semibold mb-6 text-center md:text-left">
+                    <i class="fas fa-laptop-code mr-3 text-blue-500 dark:text-blue-400"></i> 
+                    Pengembangan Web
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- Web Activity 1 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="h-36 sm:h-48 bg-blue-500/10 flex items-center justify-center">
+                            <i class="fas fa-code text-blue-500 dark:text-blue-400 text-5xl sm:text-6xl"></i>
+                        </div>
+                        <div class="p-5 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2">Sesi Coding</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                                Proses pengembangan sebuah website untuk bisnis kecil kecilan, menggunakan react.js, HTML5, CSS, JavaScript
+                            </p>
+                            <div class="flex space-x-3 text-sm sm:text-base">
+                                <a href="Coding.html" class="text-blue-500 dark:text-blue-400 hover:underline">Lihat Album</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl sm:text-2xl font-semibold mb-6 text-center md:text-left">
+                    <i class="fas fa-tools mr-3 text-purple-500 dark:text-purple-400"></i> 
+                    IT Support Sekolah
+                </h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- IT Activity 1 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="h-36 sm:h-48 bg-yellow-500/10 flex items-center justify-center">
+                            <i class="fas fa-desktop text-yellow-500 dark:text-yellow-400 text-5xl sm:text-6xl"></i>
+                        </div>
+                        <div class="p-5 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2">Perbaikan Komputer</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                                Memperbaiki komputer lab komputer yang mengalami masalah hardware
+                            </p>
+                            <div class="flex space-x-3 text-sm sm:text-base">
+                                <a href="#" class="text-yellow-500 dark:text-yellow-400 hover:underline">Lihat Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- IT Activity 2 -->
+                    <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden card-hover">
+                        <div class="h-36 sm:h-48 bg-red-500/10 flex items-center justify-center">
+                            <i class="fas fa-network-wired text-red-500 dark:text-red-400 text-5xl sm:text-6xl"></i>
+                        </div>
+                        <div class="p-5 sm:p-6">
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2">Maintenance Jaringan</h3>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm sm:text-base">
+                                Memperbaiki infrastruktur jaringan sekolah
+                            </p>
+                            <div class="flex space-x-3 text-sm sm:text-base">
+                                <a href="#" class="text-red-500 dark:text-red-400 hover:underline">Lihat Detail</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10 sm:mt-12">
+                <a href="#" class="px-5 sm:px-6 py-2 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 inline-flex items-center text-sm sm:text-base">
+                    Lihat Lebih Banyak <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-16 sm:py-20 bg-gray-100 dark:bg-gray-800 section-padding animate-section">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-3xl font-bold text-center mb-10 sm:mb-12">Hubungi <span class="gradient-text">Saya</span></h2>
+            
+            <div class="flex flex-col md:flex-row mobile-stack">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-6 lg:pr-8">
+                    <h3 class="text-xl font-semibold mb-4">Informasi Kontak</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 text-sm sm:text-base">
+                        Jangan ragu untuk menghubungi saya untuk kolaborasi, kesempatan, atau sekadar menyapa!
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-blue-500 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">Email</h4>
+                                <a href="mailto:mhilmi@example.com" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 text-sm sm:text-base">hilmihd242@gmail.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mr-4">
+                                <i class="fab fa-github text-purple-500 dark:text-purple-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">GitHub</h4>
+                                <a href="https://github.com/MHFADEV" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-purple-500 dark:hover:text-purple-400 text-sm sm:text-base">github.com/MHFADEV</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center bg-white/50 dark:bg-gray-700/50 p-4 rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center mr-4">
+                                <i class="fab fa-linkedin-in text-blue-500 dark:text-blue-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">LinkedIn</h4>
+                                <a href="https://linkedin.com/in/mhilmi" target="_blank" class="text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 text-sm sm:text-base">linkedin.com/in/mhilmi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2 contact-form">
+                    <form action="https://formsubmit.co/hilmihd242@gmail.com" method="POST" class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-5 sm:p-6">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_next" value="https://yourdomain.com/thanks.html">
+
+                        <div class="mb-4">
+                            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-2 text-sm sm:text-base">Nama Lengkap</label>
+                            <input type="text" name="name" id="name" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 text-sm sm:text-base">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="block text-gray-700 dark:text-gray-300 mb-2 text-sm sm:text-base">Email</label>
+                            <input type="email" name="email" id="email" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 text-sm sm:text-base">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="message" class="block text-gray-700 dark:text-gray-300 mb-2 text-sm sm:text-base">Pesan</label>
+                            <textarea name="message" id="message" rows="4" required class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 text-sm sm:text-base"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full px-5 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 text-sm sm:text-base">
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-gray-300 py-8">
+        <div class="container mx-auto px-4 sm:px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <a href="#" class="text-2xl font-bold gradient-text">M.Hilmi f adi</a>
+                    <p class="mt-2 text-sm sm:text-base">Web Developer & IT Support Specialist</p>
+                </div>
+                <div class="flex space-x-4 sm:space-x-6">
+                    <a href="https://github.com/MHFADEV" target="_blank" class="hover:text-blue-400 transition-colors duration-300">
+                        <i class="fab fa-github text-lg sm:text-xl"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/mhilmi" target="_blank" class="hover:text-blue-400 transition-colors duration-300">
+                        <i class="fab fa-linkedin-in text-lg sm:text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-400 transition-colors duration-300">
+                        <i class="fab fa-twitter text-lg sm:text-xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-blue-400 transition-colors duration-300">
+                        <i class="fab fa-instagram text-lg sm:text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-sm sm:text-base">
+                <p>&copy; 2023 M Hilmi. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>

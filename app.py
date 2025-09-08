@@ -1,12 +1,13 @@
 import os
 from flask import Flask, render_template, request, jsonify
 import logging
+from email_service import send_feedback_email
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
+app.secret_key = os.environ.get("QX2L7OagAmYEXVTdK5IUB81WEA7AYHmKMnLMQJYqoFxC4zokzRt5DvV69a3fthwOMdqwbbmMJU5/jRS7lubwqg==", "dev-secret-key-change-in-production")
 
 @app.route('/')
 def index():
@@ -76,18 +77,33 @@ def contact():
         email = request.form.get('email')
         message = request.form.get('message')
         
-        # In a real application, you would save this to a database or send an email
-        app.logger.info(f"Contact form submission: {name} ({email}): {message}")
+        if not all([name, email, message]):
+            return jsonify({
+                'status': 'error',
+                'message': 'Semua field harus diisi!'
+            }), 400
         
-        return jsonify({
-            'status': 'success',
-            'message': 'Pesan Anda telah terkirim! Terima kasih.'
-        })
+        # Send email using SendGrid
+        email_sent = send_feedback_email(name, email, message)
+        
+        if email_sent:
+            app.logger.info(f"Contact form submission sent to email: {name} ({email})")
+            return jsonify({
+                'status': 'success',
+                'message': '🎉 Pesan berhasil dikirim ke hilmimax109@gmail.com! Terima kasih atas feedback Anda.'
+            })
+        else:
+            app.logger.error("Failed to send email")
+            return jsonify({
+                'status': 'error',
+                'message': '❌ Gagal mengirim email. Silakan coba lagi nanti.'
+            }), 500
+            
     except Exception as e:
         app.logger.error(f"Contact form error: {str(e)}")
         return jsonify({
             'status': 'error',
-            'message': 'Terjadi kesalahan. Silakan coba lagi.'
+            'message': 'Terjadi kesalahan sistem. Silakan coba lagi.'
         }), 500
 
 if __name__ == '__main__':

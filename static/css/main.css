@@ -825,6 +825,118 @@ body {
     75% { border-radius: 25% 75% 25% 75%; }
 }
 
+/* Technology Icons */
+.tech-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dark .tech-icon-item {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.tech-icon-item:hover {
+    transform: translateY(-5px) scale(1.05);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.dark .tech-icon-item:hover {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+.tech-icon-item i {
+    animation: pulse 2s infinite;
+}
+
+.tech-icon-item:hover i {
+    animation: spin 1s ease-in-out;
+}
+
+.tech-label {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.tech-icon-item:hover .tech-label {
+    opacity: 1;
+}
+
+/* Enhanced skill bars with better colors */
+.skill-item {
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.skill-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(5px);
+}
+
+.dark .skill-item:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced project tags */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    transform: scale(1.05);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dark .tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Additional floating animations */
+@keyframes float-tech {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-10px) rotate(5deg); }
+    50% { transform: translateY(-5px) rotate(-3deg); }
+    75% { transform: translateY(-15px) rotate(2deg); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+    }
+}
+
+.dark @keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        transform: scale(1.02);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .timeline-item:nth-child(odd) .timeline-content,

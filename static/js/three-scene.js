@@ -60,6 +60,7 @@ class ThreeScene {
         this.createFloatingShapes();
         this.createParticles();
         this.createWaveform();
+        this.createYinYang3D();
     }
 
     createFloatingShapes() {
@@ -157,6 +158,101 @@ class ThreeScene {
         this.objects.push(wave);
     }
 
+    createYinYang3D() {
+        // Create main yin-yang circle
+        const yinYangGroup = new THREE.Group();
+        
+        // Yin side (black)
+        const yinGeometry = new THREE.CylinderGeometry(2, 2, 0.3, 32, 1, false, 0, Math.PI);
+        const yinMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.8
+        });
+        const yinMesh = new THREE.Mesh(yinGeometry, yinMaterial);
+        yinMesh.rotation.y = Math.PI;
+        yinYangGroup.add(yinMesh);
+        
+        // Yang side (white)
+        const yangGeometry = new THREE.CylinderGeometry(2, 2, 0.3, 32, 1, false, 0, Math.PI);
+        const yangMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.8
+        });
+        const yangMesh = new THREE.Mesh(yangGeometry, yangMaterial);
+        yinYangGroup.add(yangMesh);
+        
+        // Small yin circle (white dot on black side)
+        const smallYinGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.31, 32);
+        const smallYinMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0.9
+        });
+        const smallYinMesh = new THREE.Mesh(smallYinGeometry, smallYinMaterial);
+        smallYinMesh.position.set(-1, 0, 0);
+        yinYangGroup.add(smallYinMesh);
+        
+        // Small yang circle (black dot on white side)
+        const smallYangGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.31, 32);
+        const smallYangMaterial = new THREE.MeshLambertMaterial({ 
+            color: 0x000000,
+            transparent: true,
+            opacity: 0.9
+        });
+        const smallYangMesh = new THREE.Mesh(smallYangGeometry, smallYangMaterial);
+        smallYangMesh.position.set(1, 0, 0);
+        yinYangGroup.add(smallYangMesh);
+        
+        // Large yin semicircle (black on white side)
+        const largeYinGeometry = new THREE.CylinderGeometry(1, 1, 0.31, 32, 1, false, 0, Math.PI);
+        const largeYinMesh = new THREE.Mesh(largeYinGeometry, yinMaterial);
+        largeYinMesh.position.set(1, 0, 0);
+        largeYinMesh.rotation.y = Math.PI;
+        yinYangGroup.add(largeYinMesh);
+        
+        // Large yang semicircle (white on black side)
+        const largeYangGeometry = new THREE.CylinderGeometry(1, 1, 0.31, 32, 1, false, 0, Math.PI);
+        const largeYangMesh = new THREE.Mesh(largeYangGeometry, yangMaterial);
+        largeYangMesh.position.set(-1, 0, 0);
+        yinYangGroup.add(largeYangMesh);
+        
+        // Position the yin-yang in the background
+        yinYangGroup.position.set(0, 0, -10);
+        yinYangGroup.rotation.x = Math.PI / 2;
+        
+        // Store reference for animation
+        yinYangGroup.userData = {
+            isYinYang: true,
+            rotationSpeed: 0.005
+        };
+        
+        this.scene.add(yinYangGroup);
+        this.objects.push(yinYangGroup);
+        
+        // Create multiple smaller yin-yang symbols floating around
+        for (let i = 0; i < 3; i++) {
+            const smallYinYang = yinYangGroup.clone();
+            smallYinYang.scale.setScalar(0.3);
+            smallYinYang.position.set(
+                (Math.random() - 0.5) * 15,
+                (Math.random() - 0.5) * 10,
+                -15 + Math.random() * -5
+            );
+            smallYinYang.userData = {
+                isYinYang: true,
+                rotationSpeed: 0.01 + Math.random() * 0.02,
+                floatSpeed: 0.002 + Math.random() * 0.005,
+                floatOffset: i * Math.PI / 1.5,
+                originalPosition: [...smallYinYang.position.toArray()]
+            };
+            
+            this.scene.add(smallYinYang);
+            this.objects.push(smallYinYang);
+        }
+    }
+
     setupEventListeners() {
         // Mouse movement
         window.addEventListener('mousemove', (event) => {
@@ -184,6 +280,11 @@ class ThreeScene {
         const isDark = document.documentElement.classList.contains('dark');
         
         this.objects.forEach(object => {
+            // Skip yin-yang objects as they should maintain their black/white colors
+            if (object.userData && object.userData.isYinYang) {
+                return;
+            }
+            
             if (object.material) {
                 if (object.material.color) {
                     object.material.color.setHex(isDark ? 0xffffff : 0x000000);
@@ -245,6 +346,25 @@ class ThreeScene {
                 }
                 
                 object.geometry.attributes.position.needsUpdate = true;
+            }
+            
+            // Animate yin-yang symbols
+            if (object.userData && object.userData.isYinYang) {
+                // Main rotation
+                object.rotation.z += object.userData.rotationSpeed;
+                
+                // Floating movement for smaller yin-yangs
+                if (object.userData.floatSpeed && object.userData.originalPosition) {
+                    const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 2;
+                    const floatX = Math.cos(time * object.userData.floatSpeed * 0.7 + object.userData.floatOffset) * 1;
+                    
+                    object.position.x = object.userData.originalPosition[0] + floatX;
+                    object.position.y = object.userData.originalPosition[1] + floatY;
+                    
+                    // Additional rotation for smaller ones
+                    object.rotation.x += 0.002;
+                    object.rotation.y += 0.003;
+                }
             }
         });
 

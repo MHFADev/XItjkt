@@ -15,6 +15,8 @@ class AnimationController {
         this.setupParallaxEffects();
         this.setupInteractiveElements();
         this.setupFloatingParticles();
+        this.setupTechIconAnimations();
+        this.setupAdvancedAnimations();
         this.startAnimationLoop();
     }
 
@@ -325,19 +327,208 @@ class AnimationController {
         
         animate();
     }
+
+    // 13. Technology Icons Interactive Animations
+    setupTechIconAnimations() {
+        const techIcons = document.querySelectorAll('.tech-icon-item');
+        
+        techIcons.forEach((icon, index) => {
+            // Mouse enter animation
+            icon.addEventListener('mouseenter', () => {
+                const iconElement = icon.querySelector('i');
+                iconElement.style.transform = 'scale(1.2) rotate(10deg)';
+                iconElement.style.transition = 'transform 0.3s ease';
+                
+                // Create sparkle effect
+                this.createSparkles(icon);
+            });
+            
+            // Mouse leave animation
+            icon.addEventListener('mouseleave', () => {
+                const iconElement = icon.querySelector('i');
+                iconElement.style.transform = 'scale(1) rotate(0deg)';
+            });
+            
+            // Click animation
+            icon.addEventListener('click', () => {
+                icon.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    icon.style.transform = '';
+                }, 150);
+                
+                // Create ripple effect
+                this.createTechRipple(icon);
+            });
+            
+            // Random floating animation
+            this.addFloatingAnimation(icon, index);
+        });
+    }
+
+    // 14. Advanced Animation Effects
+    setupAdvancedAnimations() {
+        // Parallax text effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroText = document.querySelector('.hero-gradient-text');
+            if (heroText) {
+                heroText.style.transform = `translateY(${scrolled * 0.1}px)`;
+            }
+        });
+        
+        // Magnetic button effect
+        document.querySelectorAll('.interactive-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) scale(1.02)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px) scale(1)';
+            });
+        });
+        
+        // Skill bars glow effect
+        document.querySelectorAll('.skill-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const skillBar = item.querySelector('.skill-bar');
+                if (skillBar) {
+                    skillBar.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.3)';
+                    if (document.documentElement.classList.contains('dark')) {
+                        skillBar.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3)';
+                    }
+                }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                const skillBar = item.querySelector('.skill-bar');
+                if (skillBar) {
+                    skillBar.style.boxShadow = '';
+                }
+            });
+        });
+    }
+
+    // Create sparkle effect for tech icons
+    createSparkles(element) {
+        for (let i = 0; i < 5; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.style.cssText = `
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: gold;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 1000;
+                animation: sparkle 1s ease-out forwards;
+            `;
+            
+            const rect = element.getBoundingClientRect();
+            sparkle.style.left = rect.left + Math.random() * rect.width + 'px';
+            sparkle.style.top = rect.top + Math.random() * rect.height + 'px';
+            
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+    }
+
+    // Create tech ripple effect
+    createTechRipple(element) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.6);
+            transform: scale(0);
+            animation: techRipple 0.8s ease-out;
+            pointer-events: none;
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            margin-left: -50px;
+            margin-top: -50px;
+        `;
+        
+        element.style.position = 'relative';
+        element.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 800);
+    }
+
+    // Add floating animation to tech icons
+    addFloatingAnimation(element, index) {
+        const animationDelay = index * 200;
+        const duration = 3000 + Math.random() * 2000;
+        
+        setInterval(() => {
+            const randomX = (Math.random() - 0.5) * 10;
+            const randomY = (Math.random() - 0.5) * 10;
+            const randomRotation = (Math.random() - 0.5) * 20;
+            
+            element.style.transition = 'transform 1s ease-in-out';
+            element.style.transform += ` translate(${randomX}px, ${randomY}px) rotate(${randomRotation}deg)`;
+            
+            setTimeout(() => {
+                element.style.transform = element.style.transform.replace(/translate\([^)]*\)/, '').replace(/rotate\([^)]*\)/, '');
+            }, 1000);
+        }, duration);
+    }
 }
 
-// CSS for ripple animation
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = `
+// CSS for animations
+const animationStyles = document.createElement('style');
+animationStyles.textContent = `
     @keyframes ripple {
         to {
             transform: scale(4);
             opacity: 0;
         }
     }
+    
+    @keyframes techRipple {
+        to {
+            transform: scale(3);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes sparkle {
+        0% {
+            transform: scale(0) rotate(0deg);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1) rotate(180deg);
+            opacity: 0.8;
+        }
+        100% {
+            transform: scale(0) rotate(360deg);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes techFloat {
+        0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-5px) rotate(2deg);
+        }
+        50% {
+            transform: translateY(-10px) rotate(-1deg);
+        }
+        75% {
+            transform: translateY(-3px) rotate(1deg);
+        }
+    }
 `;
-document.head.appendChild(rippleStyle);
+document.head.appendChild(animationStyles);
 
 // Initialize animations when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {

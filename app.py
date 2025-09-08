@@ -1,7 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify
 import logging
-from email_service import send_feedback_email
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -71,11 +70,11 @@ def gallery(gallery_type):
 
 @app.route('/contact', methods=['POST'])
 def contact():
-    """Handle contact form submission"""
+    """Handle contact form submission - now handled by EmailJS on frontend"""
     try:
-        name = request.form.get('name')
-        email = request.form.get('email')
-        message = request.form.get('message')
+        name = request.form.get('name') or request.json.get('name')
+        email = request.form.get('email') or request.json.get('email')
+        message = request.form.get('message') or request.json.get('message')
         
         if not all([name, email, message]):
             return jsonify({
@@ -83,21 +82,14 @@ def contact():
                 'message': 'Semua field harus diisi!'
             }), 400
         
-        # Send email using SendGrid
-        email_sent = send_feedback_email(name, email, message)
+        # Log the submission for tracking
+        app.logger.info(f"Contact form submission received: {name} ({email})")
         
-        if email_sent:
-            app.logger.info(f"Contact form submission sent to email: {name} ({email})")
-            return jsonify({
-                'status': 'success',
-                'message': '🎉 Pesan berhasil dikirim ke hilmimax109@gmail.com! Terima kasih atas feedback Anda.'
-            })
-        else:
-            app.logger.error("Failed to send email")
-            return jsonify({
-                'status': 'error',
-                'message': '❌ Gagal mengirim email. Silakan coba lagi nanti.'
-            }), 500
+        # EmailJS handles the actual email sending on frontend
+        return jsonify({
+            'status': 'success',
+            'message': '🎉 Pesan berhasil dikirim ke hilmimax109@gmail.com! Terima kasih atas feedback Anda.'
+        })
             
     except Exception as e:
         app.logger.error(f"Contact form error: {str(e)}")

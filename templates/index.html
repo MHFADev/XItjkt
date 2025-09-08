@@ -11,6 +11,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     
+    <!-- React Libraries -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     
@@ -226,6 +230,10 @@
                     <span class="tech-label">Linux</span>
                 </div>
             </div>
+            
+            <!-- React Interactive Components -->
+            <div id="react-project-showcase" class="mb-12"></div>
+            <div id="react-skill-calculator" class="mb-12"></div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <!-- Web Development Skills -->
@@ -478,7 +486,7 @@
                     <div class="space-y-4">
                         <div class="contact-info animate-fade-in-up" style="animation-delay: 0.4s;">
                             <i class="fas fa-envelope contact-icon"></i>
-                            <span>hilmihd242@gmail.com</span>
+                            <span>hilmimax109@gmail.com</span>
                         </div>
                         <div class="contact-info animate-fade-in-up" style="animation-delay: 0.6s;">
                             <i class="fas fa-phone contact-icon"></i>
@@ -504,28 +512,39 @@
                 </div>
                 
                 <div class="animate-slide-in" style="animation-delay: 0.4s;">
+                    <!-- Email Service Info -->
+                    <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <div class="flex items-center gap-3 mb-2">
+                            <i class="fas fa-envelope text-blue-600 dark:text-blue-400"></i>
+                            <span class="font-medium text-blue-800 dark:text-blue-200">📧 Email Langsung ke hilmimax109@gmail.com</span>
+                        </div>
+                        <p class="text-sm text-blue-700 dark:text-blue-300">Pesan Anda akan dikirim langsung ke email saya menggunakan EmailJS yang gratis dan aman!</p>
+                    </div>
+                    
                     <form id="contact-form" class="contact-form">
                         <div class="form-group">
-                            <label for="name" class="form-label">Nama</label>
-                            <input type="text" id="name" name="name" class="form-input" required>
+                            <label for="name" class="form-label">Nama Lengkap</label>
+                            <input type="text" id="name" name="name" class="form-input" required placeholder="Masukkan nama lengkap Anda">
                         </div>
                         
                         <div class="form-group">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-input" required>
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" id="email" name="email" class="form-input" required placeholder="email@example.com">
                         </div>
                         
                         <div class="form-group">
-                            <label for="message" class="form-label">Pesan</label>
-                            <textarea id="message" name="message" rows="5" class="form-input" required></textarea>
+                            <label for="message" class="form-label">Pesan/Feedback</label>
+                            <textarea id="message" name="message" rows="6" class="form-input" required placeholder="Tulis feedback, saran, atau pesan Anda di sini... (maks 500 karakter)"></textarea>
                         </div>
                         
-                        <button type="submit" class="form-submit animate-pulse">
-                            <span class="submit-text">Kirim Pesan</span>
+                        <button type="submit" class="form-submit">
+                            <span class="submit-text">📨 Kirim ke Gmail</span>
                             <div class="submit-loader hidden">
                                 <i class="fas fa-spinner fa-spin"></i>
                             </div>
                         </button>
+                        
+                        <div id="form-response" class="hidden"></div>
                     </form>
                 </div>
             </div>
@@ -542,5 +561,7 @@
     <!-- Scripts -->
     <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
     <script src="{{ url_for('static', filename='js/three-scene.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/react-components.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/emailjs-integration.js') }}"></script>
 </body>
 </html>

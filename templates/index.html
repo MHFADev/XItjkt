@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M Hilmi | Portfolio Profesional</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'yin': '#000000',
+                        'yang': '#ffffff',
+                        'yin-soft': '#1a1a1a',
+                        'yang-soft': '#f8f8f8'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-reverse': 'float-reverse 5s ease-in-out infinite',
+                        'spin-slow': 'spin 8s linear infinite',
+                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'rotate-3d': 'rotate3d 10s linear infinite',
+                        'slide-in': 'slideIn 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.6s ease-out',
+                        'typewriter': 'typewriter 4s steps(40) infinite',
+                        'morph': 'morph 8s ease-in-out infinite'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-yang dark:bg-yin text-yin dark:text-yang transition-all duration-500">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-yang dark:bg-yin flex items-center justify-center">
+        <div class="yin-yang-loader"></div>
+    </div>
+
+    <!-- 3D Background Canvas -->
+    <canvas id="three-canvas" class="fixed inset-0 z-0"></canvas>
+
+    <!-- Background Elements -->
+    <div class="grid-pattern"></div>
+    <div class="floating-particles"></div>
+    
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-yang dark:bg-yin shadow-2xl flex items-center justify-center text-yin dark:text-yang hover:scale-110 transition-all duration-300 animate-pulse-slow">
+        <div class="yin-yang-toggle">
+            <i class="fas fa-moon dark:hidden text-xl"></i>
+            <i class="fas fa-sun hidden dark:block text-xl"></i>
+        </div>
+    </button>
+    
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 bg-yang/90 dark:bg-yin/90 backdrop-blur-md z-30 shadow-lg border-b border-gray-200 dark:border-gray-800 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-3xl font-bold gradient-text animate-pulse">MHFADEV</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link px-4 py-2 animate-slide-in">Beranda</a>
+                    <a href="#about" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.1s">Tentang</a>
+                    <a href="#skills" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.2s">Keahlian</a>
+                    <a href="#experience" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.3s">Pengalaman</a>
+                    <a href="#projects" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.4s">Proyek</a>
+                    <a href="#contact" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.5s">Kontak</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-yin dark:text-yang p-2 hover:scale-110 transition-transform">
+                    <i class="fas fa-bars text-xl animate-wiggle"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-yang dark:bg-yin px-4 py-3 shadow-lg border-t border-gray-200 dark:border-gray-800">
+            <div class="flex flex-col space-y-3">
+                <a href="#home" class="nav-link px-3 py-2">Beranda</a>
+                <a href="#about" class="nav-link px-3 py-2">Tentang</a>
+                <a href="#skills" class="nav-link px-3 py-2">Keahlian</a>
+                <a href="#experience" class="nav-link px-3 py-2">Pengalaman</a>
+                <a href="#projects" class="nav-link px-3 py-2">Proyek</a>
+                <a href="#contact" class="nav-link px-3 py-2">Kontak</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center pt-20 relative overflow-hidden">
+        <div class="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10">
+            <div class="max-w-4xl mx-auto hero-card p-8 sm:p-10 md:p-12 animate-fade-in-up">
+                <div class="hero-badge animate-bounce-slow" style="animation-delay: 0.2s;">HALO,</div>
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight animate-typewriter overflow-hidden whitespace-nowrap border-r-4 border-yin dark:border-yang" style="animation-delay: 0.4s;">
+                    I AM <br> <span class="hero-gradient-text">M. HILMI F.ADI</span>
+                </h1>
+                <div class="space-y-4 text-yin/80 dark:text-yang/80 text-base sm:text-lg md:text-xl animate-fade-in-up" style="animation-delay: 0.6s;">
+                    <p class="animate-slide-in" style="animation-delay: 0.8s;">Saya adalah pelajar SMK jurusan TJKT yang berfokus pada frontend development, sambil terus memperdalam backend untuk menjadi seorang full-stack web developer.</p>
+                    <p class="animate-slide-in" style="animation-delay: 1s;">Selain mengembangkan website, saya juga memiliki ketertarikan di bidang IT Support, mulai dari penanganan hardware, software, hingga troubleshooting dasar.</p>
+                    <p class="animate-slide-in" style="animation-delay: 1.2s;">Tujuan saya adalah menguasai keterampilan pengembangan web dan dukungan teknis, sehingga dapat memberikan solusi teknologi yang cepat, tepat, dan profesional.</p>
+                </div>
+                <div class="mt-8 flex flex-wrap gap-4 animate-scale-in" style="animation-delay: 1.4s;">
+                    <a href="#contact" class="interactive-btn px-8 py-4 bg-gradient-to-r from-yin to-yin-soft dark:from-yang dark:to-yang-soft text-yang dark:text-yin rounded-lg font-medium hover:scale-105 transition-all duration-300 shadow-lg">
+                        Hubungi Saya
+                    </a>
+                    <a href="#projects" class="interactive-btn px-8 py-4 border-2 border-yin dark:border-yang rounded-lg font-medium hover:bg-yin hover:text-yang dark:hover:bg-yang dark:hover:text-yin transition-all duration-300">
+                        Lihat Proyek
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating 3D Elements -->
+        <div class="floating-3d-elements">
+            <div class="floating-cube animate-rotate-3d"></div>
+            <div class="floating-sphere animate-float"></div>
+            <div class="floating-pyramid animate-float-reverse"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Tentang <span class="gradient-text">Saya</span></h2>
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/3 flex justify-center">
+                    <div class="profile-image-container animate-morph">
+                        <img src="https://raw.githubusercontent.com/Hilmi12309/aseet/refs/heads/main/foto/1000558609%20(1).png" 
+                             alt="M Hilmi" 
+                             class="profile-image">
+                    </div>
+                </div>
+                <div class="lg:w-2/3 animate-fade-in-up" style="animation-delay: 0.3s;">
+                    <h3 class="text-3xl font-semibold mb-6">Siapa Saya?</h3>
+                    <p class="mb-8 text-yin/80 dark:text-yang/80 text-lg leading-relaxed">
+                        Saya M. Hilmi F. Adi, seorang pelajar yang berdedikasi dengan minat besar di bidang teknologi. Saat ini, saya berfokus untuk menjadi full-stack web developer sekaligus mendapatkan pengalaman sebagai spesialis IT Support. Perjalanan saya di dunia teknologi didorong oleh rasa ingin tahu dan keinginan untuk memecahkan masalah secara kreatif.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="info-card animate-scale-in" style="animation-delay: 0.5s;">
+                            <h4 class="font-semibold mb-3 text-xl">Pendidikan</h4>
+                            <p class="text-yin/70 dark:text-yang/70">Saat ini saya menempuh pendidikan di SMK dengan fokus pada ilmu komputer dan teknologi informasi.</p>
+                        </div>
+                        <div class="info-card animate-scale-in" style="animation-delay: 0.7s;">
+                            <h4 class="font-semibold mb-3 text-xl">Organisasi ICT</h4>
+                            <p class="text-yin/70 dark:text-yang/70">Anggota aktif organisasi ICT sekolah, mengerjakan pemeliharaan teknologi termasuk sistem listrik dan jaringan.</p>
+                        </div>
+                        <div class="info-card animate-scale-in" style="animation-delay: 0.9s;">
+                            <h4 class="font-semibold mb-3 text-xl">Pengembangan Web</h4>
+                            <p class="text-yin/70 dark:text-yang/70">Frontend developer yang sedang memperluas ke pengembangan backend untuk menjadi full-stack.</p>
+                        </div>
+                        <div class="info-card animate-scale-in" style="animation-delay: 1.1s;">
+                            <h4 class="font-semibold mb-3 text-xl">IT Support</h4>
+                            <p class="text-yin/70 dark:text-yang/70">Memberikan dukungan teknis dan troubleshooting untuk berbagai sistem dan jaringan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 relative">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Keahlian <span class="gradient-text">Saya</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Web Development Skills -->
+                <div class="skills-card animate-slide-in" style="animation-delay: 0.2s;">
+                    <div class="flex items-center mb-6">
+                        <div class="skill-icon">
+                            <i class="fas fa-code text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold">Pengembangan Web</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">HTML/CSS</span>
+                                <span class="skill-percentage">90%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">JavaScript</span>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">React</span>
+                                <span class="skill-percentage">54%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="54"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Node.js</span>
+                                <span class="skill-percentage">60%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="60"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- IT Support Skills -->
+                <div class="skills-card animate-slide-in" style="animation-delay: 0.4s;">
+                    <div class="flex items-center mb-6">
+                        <div class="skill-icon bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
+                            <i class="fas fa-desktop text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-semibold">IT Support</h3>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Perbaikan Hardware</span>
+                                <span class="skill-percentage">85%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Pemeliharaan Jaringan</span>
+                                <span class="skill-percentage">75%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="75"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Troubleshooting Software</span>
+                                <span class="skill-percentage">80%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Sistem Administrasi</span>
+                                <span class="skill-percentage">70%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-skill="70"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline Section -->
+    <section id="experience" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Pengalaman <span class="gradient-text">Saya</span></h2>
+            
+            <div class="timeline-container">
+                <div class="timeline-item animate-slide-in" style="animation-delay: 0.2s;">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2">Anggota Divisi TIK Sekolah</h3>
+                        <p class="text-sm text-gray-500 mb-3">2023 - Sekarang</p>
+                        <p class="text-yin/80 dark:text-yang/80">Bertanggung jawab dalam pemeliharaan hardware, troubleshooting jaringan, dan dukungan teknis untuk seluruh kegiatan sekolah.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-slide-in" style="animation-delay: 0.4s;">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2">Frontend Developer (Self-taught)</h3>
+                        <p class="text-sm text-gray-500 mb-3">2022 - Sekarang</p>
+                        <p class="text-yin/80 dark:text-yang/80">Mengembangkan kemampuan dalam HTML, CSS, JavaScript, dan React melalui proyek-proyek personal dan pembelajaran mandiri.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item animate-slide-in" style="animation-delay: 0.6s;">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3 class="text-xl font-semibold mb-2">Siswa SMK Jurusan TJKT</h3>
+                        <p class="text-sm text-gray-500 mb-3">2021 - Sekarang</p>
+                        <p class="text-yin/80 dark:text-yang/80">Mendalami ilmu komputer dan teknologi informasi dengan fokus pada jaringan komputer dan telekomunikasi.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 relative">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Proyek <span class="gradient-text">Saya</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="project-card animate-scale-in" style="animation-delay: 0.2s;">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Web Development Project">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="/gallery/coding" class="project-link">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="project-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="text-xl font-semibold mb-3">Portfolio Website</h3>
+                        <p class="text-yin/80 dark:text-yang/80 mb-4">Website portfolio responsif dengan desain modern dan animasi interaktif menggunakan HTML, CSS, dan JavaScript.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card animate-scale-in" style="animation-delay: 0.4s;">
+                    <div class="project-image">
+                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="IT Support Project">
+                        <div class="project-overlay">
+                            <div class="project-links">
+                                <a href="/gallery/ict" class="project-link">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="project-link">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="text-xl font-semibold mb-3">IT Support Sekolah</h3>
+                        <p class="text-yin/80 dark:text-yang/80 mb-4">Dokumentasi kegiatan pemeliharaan sistem komputer dan jaringan di lingkungan sekolah.</p>
+                        <div class="project-tags">
+                            <span class="tag">Hardware</span>
+                            <span class="tag">Networking</span>
+                            <span class="tag">Troubleshooting</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
+        <div class="container mx-auto px-4 sm:px-6">
+            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Hubungi <span class="gradient-text">Saya</span></h2>
+            
+            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="animate-slide-in" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-semibold mb-6">Mari Berkolaborasi!</h3>
+                    <p class="text-yin/80 dark:text-yang/80 mb-8 leading-relaxed">
+                        Saya selalu terbuka untuk peluang baru, proyek menarik, atau sekadar berdiskusi tentang teknologi. 
+                        Jangan ragu untuk menghubungi saya!
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.4s;">
+                            <i class="fas fa-envelope contact-icon"></i>
+                            <span>hilmi.fadiadi@example.com</span>
+                        </div>
+                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.6s;">
+                            <i class="fas fa-phone contact-icon"></i>
+                            <span>+62 xxx-xxxx-xxxx</span>
+                        </div>
+                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.8s;">
+                            <i class="fas fa-map-marker-alt contact-icon"></i>
+                            <span>Indonesia</span>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links mt-8">
+                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1s;">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1.2s;">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1.4s;">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="animate-slide-in" style="animation-delay: 0.4s;">
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Nama</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">Pesan</label>
+                            <textarea id="message" name="message" rows="5" class="form-input" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="form-submit animate-pulse">
+                            <span class="submit-text">Kirim Pesan</span>
+                            <div class="submit-loader hidden">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 bg-yin dark:bg-yang text-yang dark:text-yin">
+        <div class="container mx-auto px-4 sm:px-6 text-center">
+            <p class="animate-fade-in-up">&copy; 2024 M. Hilmi F. Adi. Semua hak cipta dilindungi.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/three-scene.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>M Hilmi | {{ data.title }}</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'yin': '#000000',
+                        'yang': '#ffffff',
+                        'yin-soft': '#1a1a1a',
+                        'yang-soft': '#f8f8f8'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-yang dark:bg-yin text-yin dark:text-yang transition-all duration-500">
+    <!-- Background Elements -->
+    <div class="grid-pattern"></div>
+    
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-yang dark:bg-yin shadow-2xl flex items-center justify-center text-yin dark:text-yang hover:scale-110 transition-all duration-300">
+        <i class="fas fa-moon dark:hidden text-xl"></i>
+        <i class="fas fa-sun hidden dark:block text-xl"></i>
+    </button>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-yang/90 dark:bg-yin/90 backdrop-blur-md z-30 shadow-lg border-b border-gray-200 dark:border-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="{{ url_for('index') }}" class="text-3xl font-bold gradient-text">MHFADEV</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="{{ url_for('index') }}" class="nav-link px-4 py-2">Kembali ke Portfolio</a>
+                </div>
+                <button id="mobile-menu-button" class="md:hidden text-yin dark:text-yang p-2">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-yang dark:bg-yin px-4 py-3 shadow-lg border-t border-gray-200 dark:border-gray-800">
+            <div class="flex flex-col space-y-3">
+                <a href="{{ url_for('index') }}" class="nav-link px-3 py-2">Kembali ke Portfolio</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12">
+        <!-- Gallery Header -->
+        <section class="py-12 animate-fade-in-up">
+            <div class="container mx-auto px-4 sm:px-6 text-center">
+                <h1 class="text-4xl sm:text-5xl font-bold mb-6">{{ data.title }}</h1>
+                <p class="text-lg sm:text-xl text-yin/80 dark:text-yang/80 max-w-3xl mx-auto">
+                    {{ data.description }}
+                </p>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="py-8">
+            <div class="container mx-auto px-4 sm:px-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                    {% for image in data.images %}
+                    <div class="gallery-item animate-scale-in" style="animation-delay: {{ loop.index0 * 0.2 }}s;" onclick="openLightbox('{{ image.url }}')">
+                        <div class="relative overflow-hidden rounded-xl shadow-lg h-64 sm:h-80 group">
+                            <img src="{{ image.url }}" 
+                                 alt="{{ image.title }}" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div>
+                                    <h3 class="text-white font-semibold text-lg">{{ image.title }}</h3>
+                                    <p class="text-gray-300 text-sm">{{ image.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="lightbox-image" src="" alt="">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    
+    <script>
+        function openLightbox(imageSrc) {
+            document.getElementById('lightbox').style.display = 'flex';
+            document.getElementById('lightbox-image').src = imageSrc;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+</html>

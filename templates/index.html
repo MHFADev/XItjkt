@@ -169,7 +169,27 @@
     <div id="loading-screen" class="fixed inset-0 z-50 bg-dark-bg flex items-center justify-center">
         <div class="text-center">
             <div class="inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p class="text-xl text-primary animate-pulse">Loading...</p>
+            <p class="text-xl text-primary animate-pulse cute-font">Loading XI TJKT 1...</p>
+        </div>
+    </div>
+
+    <!-- Floating Cute Mascot -->
+    <div id="cute-mascot" class="fixed bottom-24 left-6 z-40 cursor-pointer hover:scale-110 transition-all duration-300" style="display: none;">
+        <div class="relative">
+            <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-500 rounded-full flex items-center justify-center shadow-lg animate-bounce-slow">
+                <span class="text-3xl">🤖</span>
+            </div>
+            <div id="mascot-bubble" class="absolute bottom-full left-full ml-2 mb-2 bg-white text-gray-800 px-4 py-2 rounded-lg shadow-lg whitespace-nowrap text-sm font-semibold" style="display: none;">
+                Halo! Klik aku! 👋
+            </div>
+        </div>
+    </div>
+
+    <!-- Fun Counter Display -->
+    <div id="fun-counter" class="fixed top-20 left-6 z-40 bg-gradient-to-r from-purple-500/80 to-pink-500/80 backdrop-blur-md px-4 py-2 rounded-full shadow-lg" style="display: none;">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">🎉</span>
+            <span class="text-white font-bold">Klik: <span id="click-count">0</span></span>
         </div>
     </div>
 

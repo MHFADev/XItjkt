@@ -1,19 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M Hilmi | Portfolio Profesional</title>
+    <title>{{ class_data.name }} - {{ class_data.full_name }}</title>
     
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    
-    <!-- React Libraries -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
@@ -25,345 +21,292 @@
             theme: {
                 extend: {
                     colors: {
-                        'yin': '#000000',
-                        'yang': '#ffffff',
-                        'yin-soft': '#1a1a1a',
-                        'yang-soft': '#f8f8f8'
+                        'primary': '#8B5CF6',
+                        'primary-dark': '#7C3AED',
+                        'secondary': '#EC4899',
+                        'accent': '#10B981',
+                        'dark-bg': '#0f172a',
+                        'dark-card': '#1e293b',
+                        'dark-hover': '#334155'
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
-                        'float-reverse': 'float-reverse 5s ease-in-out infinite',
-                        'spin-slow': 'spin 8s linear infinite',
-                        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'bounce-slow': 'bounce 3s infinite',
                         'wiggle': 'wiggle 1s ease-in-out infinite',
-                        'rotate-3d': 'rotate3d 10s linear infinite',
-                        'slide-in': 'slideIn 0.5s ease-out',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out',
                         'fade-in-up': 'fadeInUp 0.8s ease-out',
-                        'scale-in': 'scaleIn 0.6s ease-out',
-                        'typewriter': 'typewriter 4s steps(40) infinite',
-                        'morph': 'morph 8s ease-in-out infinite'
+                        'slide-in-right': 'slideInRight 0.6s ease-out',
+                        'slide-in-left': 'slideInLeft 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.5s ease-out',
+                        'rotate-slow': 'rotate 20s linear infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideInRight: {
+                            '0%': { opacity: '0', transform: 'translateX(50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        slideInLeft: {
+                            '0%': { opacity: '0', transform: 'translateX(-50px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' }
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        },
+                        rotate: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' }
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #8B5CF6, 0 0 10px #8B5CF6' },
+                            '100%': { boxShadow: '0 0 10px #8B5CF6, 0 0 20px #8B5CF6, 0 0 30px #8B5CF6' }
+                        }
                     }
                 }
             }
         }
     </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Cute+Font&display=swap');
+        
+        .cute-font { font-family: 'Cute Font', cursive; }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.85);
+            border-color: rgba(139, 92, 246, 0.6);
+            transform: translateY(-5px);
+        }
+        
+        .network-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .network-node:hover {
+            transform: scale(1.2);
+            z-index: 10;
+        }
+        
+        .network-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8B5CF6, transparent);
+            transform-origin: left center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .cute-badge {
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            animation: bounce-slow 2s infinite;
+        }
+    </style>
 </head>
-<body class="bg-yang dark:bg-yin text-yin dark:text-yang transition-all duration-500">
+<body class="bg-dark-bg text-white overflow-x-hidden">
     <!-- Loading Screen -->
-    <div id="loading-screen" class="fixed inset-0 z-50 bg-yang dark:bg-yin flex items-center justify-center">
-        <div class="yin-yang-loader"></div>
+    <div id="loading-screen" class="fixed inset-0 z-50 bg-dark-bg flex items-center justify-center">
+        <div class="text-center">
+            <div class="inline-block w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-xl text-primary animate-pulse">Loading...</p>
+        </div>
     </div>
 
     <!-- 3D Background Canvas -->
-    <canvas id="three-canvas" class="fixed inset-0 z-0"></canvas>
+    <canvas id="three-canvas" class="fixed inset-0 z-0 opacity-30"></canvas>
 
-    <!-- Background Elements -->
-    <div class="grid-pattern"></div>
-    <div class="floating-particles"></div>
+    <!-- Floating Particles -->
+    <div id="particles" class="fixed inset-0 z-0 pointer-events-none"></div>
     
-    <!-- Theme Toggle -->
-    <button id="theme-toggle" class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-yang dark:bg-yin shadow-2xl flex items-center justify-center text-yin dark:text-yang hover:scale-110 transition-all duration-300 animate-pulse-slow">
-        <div class="yin-yang-toggle">
-            <i class="fas fa-moon dark:hidden text-xl"></i>
-            <i class="fas fa-sun hidden dark:block text-xl"></i>
-        </div>
+    <!-- Theme Toggle (tetap ada opsi light mode) -->
+    <button id="theme-toggle" class="fixed top-6 right-6 z-50 w-12 h-12 rounded-full bg-dark-card hover:bg-dark-hover flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110">
+        <i class="fas fa-moon text-primary text-xl"></i>
     </button>
     
+    <!-- Support Dev Button (Floating) -->
+    <a href="https://saweria.co/YOURUSERNAME" target="_blank" class="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2 animate-bounce-slow">
+        <i class="fas fa-heart animate-pulse"></i>
+        <span class="font-semibold hidden sm:inline">Support Dev</span>
+    </a>
+    
     <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 bg-yang/90 dark:bg-yin/90 backdrop-blur-md z-30 shadow-lg border-b border-gray-200 dark:border-gray-800 transition-all duration-300">
-        <div class="container mx-auto px-4 sm:px-6 py-4">
+    <nav class="fixed top-0 left-0 right-0 bg-dark-bg/80 backdrop-blur-md z-40 border-b border-primary/20">
+        <div class="container mx-auto px-4 py-4">
             <div class="flex justify-between items-center">
-                <a href="#" class="text-3xl font-bold gradient-text animate-pulse">MHFADEV</a>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#home" class="nav-link px-4 py-2 animate-slide-in">Beranda</a>
-                    <a href="#about" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.1s">Tentang</a>
-                    <a href="#skills" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.2s">Keahlian</a>
-                    <a href="#experience" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.3s">Pengalaman</a>
-                    <a href="#projects" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.4s">Proyek</a>
-                    <a href="#contact" class="nav-link px-4 py-2 animate-slide-in" style="animation-delay: 0.5s">Kontak</a>
+                <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-pulse-slow">
+                    {{ class_data.name }}
+                </a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#home" class="nav-link hover:text-primary transition-colors">Beranda</a>
+                    <a href="#about" class="nav-link hover:text-primary transition-colors">Tentang</a>
+                    <a href="#structure" class="nav-link hover:text-primary transition-colors">Struktur</a>
+                    <a href="#teacher" class="nav-link hover:text-primary transition-colors">Wali Kelas</a>
+                    <a href="#albums" class="nav-link hover:text-primary transition-colors">Album</a>
                 </div>
-                <button id="mobile-menu-button" class="md:hidden text-yin dark:text-yang p-2 hover:scale-110 transition-transform">
-                    <i class="fas fa-bars text-xl animate-wiggle"></i>
+                <button id="mobile-menu-btn" class="md:hidden text-primary hover:scale-110 transition-transform">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
         
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-yang dark:bg-yin px-4 py-3 shadow-lg border-t border-gray-200 dark:border-gray-800">
+        <div id="mobile-menu" class="hidden md:hidden bg-dark-card px-4 py-3 border-t border-primary/20">
             <div class="flex flex-col space-y-3">
-                <a href="#home" class="nav-link px-3 py-2">Beranda</a>
-                <a href="#about" class="nav-link px-3 py-2">Tentang</a>
-                <a href="#skills" class="nav-link px-3 py-2">Keahlian</a>
-                <a href="#experience" class="nav-link px-3 py-2">Pengalaman</a>
-                <a href="#projects" class="nav-link px-3 py-2">Proyek</a>
-                <a href="#contact" class="nav-link px-3 py-2">Kontak</a>
+                <a href="#home" class="nav-link hover:text-primary transition-colors py-2">Beranda</a>
+                <a href="#about" class="nav-link hover:text-primary transition-colors py-2">Tentang</a>
+                <a href="#structure" class="nav-link hover:text-primary transition-colors py-2">Struktur</a>
+                <a href="#teacher" class="nav-link hover:text-primary transition-colors py-2">Wali Kelas</a>
+                <a href="#albums" class="nav-link hover:text-primary transition-colors py-2">Album</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <div class="container mx-auto px-4 sm:px-6 py-12 md:py-20 relative z-10">
-            <div class="max-w-4xl mx-auto hero-card p-8 sm:p-10 md:p-12 animate-fade-in-up">
-                <div class="hero-badge animate-bounce-slow" style="animation-delay: 0.2s;">HALO,</div>
-                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 leading-tight animate-typewriter overflow-hidden whitespace-nowrap border-r-4 border-yin dark:border-yang" style="animation-delay: 0.4s;">
-                    I AM <br> <span class="hero-gradient-text">M. HILMI F.ADI</span>
-                </h1>
-                <div class="space-y-4 text-yin/80 dark:text-yang/80 text-base sm:text-lg md:text-xl animate-fade-in-up" style="animation-delay: 0.6s;">
-                    <p class="animate-slide-in" style="animation-delay: 0.8s;">Saya adalah pelajar SMK jurusan TJKT yang berfokus pada frontend development, sambil terus memperdalam backend untuk menjadi seorang full-stack web developer.</p>
-                    <p class="animate-slide-in" style="animation-delay: 1s;">Selain mengembangkan website, saya juga memiliki ketertarikan di bidang IT Support, mulai dari penanganan hardware, software, hingga troubleshooting dasar.</p>
-                    <p class="animate-slide-in" style="animation-delay: 1.2s;">Tujuan saya adalah menguasai keterampilan pengembangan web dan dukungan teknis, sehingga dapat memberikan solusi teknologi yang cepat, tepat, dan profesional.</p>
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden">
+        <div class="container mx-auto px-4 py-20 relative z-10">
+            <div class="text-center max-w-4xl mx-auto animate-fade-in-up">
+                <div class="cute-badge mb-6">
+                    <i class="fas fa-network-wired mr-2"></i>Kelas Terbaik
                 </div>
-                <div class="mt-8 flex flex-wrap gap-4 animate-scale-in" style="animation-delay: 1.4s;">
-                    <a href="#contact" class="interactive-btn px-8 py-4 bg-gradient-to-r from-yin to-yin-soft dark:from-yang dark:to-yang-soft text-yang dark:text-yin rounded-lg font-medium hover:scale-105 transition-all duration-300 shadow-lg">
-                        Hubungi Saya
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-fade-in">
+                    {{ class_data.name }}
+                </h1>
+                <h2 class="text-2xl md:text-3xl mb-4 text-gray-300 animate-fade-in-up" style="animation-delay: 0.2s;">
+                    {{ class_data.full_name }}
+                </h2>
+                <p class="text-xl md:text-2xl mb-8 text-primary cute-font animate-fade-in-up" style="animation-delay: 0.4s;">
+                    "{{ class_data.motto }}"
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up" style="animation-delay: 0.6s;">
+                    <div class="glass-card p-6 rounded-2xl hover-lift">
+                        <div class="text-4xl font-bold text-primary mb-2">{{ class_data.total_students }}</div>
+                        <div class="text-gray-300">Siswa</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl hover-lift">
+                        <div class="text-4xl font-bold text-secondary mb-2">{{ class_data.year }}</div>
+                        <div class="text-gray-300">Tahun Ajaran</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl hover-lift">
+                        <div class="text-4xl font-bold text-accent mb-2">1</div>
+                        <div class="text-gray-300">Kelas Terkuat</div>
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 animate-scale-in" style="animation-delay: 0.8s;">
+                    <a href="#albums" class="bg-gradient-to-r from-primary to-primary-dark px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-images mr-2"></i>Lihat Album
                     </a>
-                    <a href="#projects" class="interactive-btn px-8 py-4 border-2 border-yin dark:border-yang rounded-lg font-medium hover:bg-yin hover:text-yang dark:hover:bg-yang dark:hover:text-yin transition-all duration-300">
-                        Lihat Proyek
+                    <a href="#structure" class="bg-dark-card border-2 border-primary px-8 py-4 rounded-full font-semibold hover:bg-primary hover:border-primary transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-sitemap mr-2"></i>Lihat Struktur
                     </a>
                 </div>
             </div>
         </div>
         
-        <!-- Floating 3D Elements -->
-        <div class="floating-3d-elements">
-            <div class="floating-cube animate-rotate-3d"></div>
-            <div class="floating-sphere animate-float"></div>
-            <div class="floating-pyramid animate-float-reverse"></div>
+        <!-- Decorative Elements -->
+        <div class="absolute top-20 left-10 opacity-20">
+            <i class="fas fa-network-wired text-6xl text-primary animate-spin-slow"></i>
+        </div>
+        <div class="absolute bottom-20 right-10 opacity-20">
+            <i class="fas fa-server text-6xl text-secondary animate-float"></i>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
-        <div class="container mx-auto px-4 sm:px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Tentang <span class="gradient-text">Saya</span></h2>
-            <div class="flex flex-col lg:flex-row items-center gap-12">
-                <div class="lg:w-1/3 flex justify-center">
-                    <div class="profile-image-container animate-morph">
-                        <img src="https://raw.githubusercontent.com/Hilmi12309/aseet/refs/heads/main/foto/1000558609%20(1).png" 
-                             alt="M Hilmi" 
-                             class="profile-image">
-                    </div>
-                </div>
-                <div class="lg:w-2/3 animate-fade-in-up" style="animation-delay: 0.3s;">
-                    <h3 class="text-3xl font-semibold mb-6">Siapa Saya?</h3>
-                    <p class="mb-8 text-yin/80 dark:text-yang/80 text-lg leading-relaxed">
-                        Saya M. Hilmi firjatullah adi, seorang pelajar yang berdedikasi dengan minat besar di bidang teknologi. Saat ini, saya berfokus untuk menjadi full-stack web developer sekaligus mendapatkan pengalaman sebagai spesialis IT Support. Perjalanan saya di dunia teknologi didorong oleh rasa ingin tahu dan keinginan untuk memecahkan masalah secara kreatif.
+    <section id="about" class="py-20 bg-dark-card/30 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 animate-fade-in-up">
+                Tentang <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas Kami</span>
+            </h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 md:p-12 rounded-3xl animate-scale-in">
+                    <p class="text-lg md:text-xl text-gray-300 leading-relaxed text-center mb-8">
+                        {{ class_data.description }}
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="info-card animate-scale-in" style="animation-delay: 0.5s;">
-                            <h4 class="font-semibold mb-3 text-xl">Pendidikan</h4>
-                            <p class="text-yin/70 dark:text-yang/70">Saat ini saya menempuh pendidikan di SMK dengan fokus pada ilmu komputer dan teknologi informasi.</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="text-center hover-lift cursor-pointer group">
+                            <div class="w-16 h-16 mx-auto mb-3 bg-primary/20 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-all">
+                                <i class="fas fa-code text-3xl text-primary"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Coding</p>
                         </div>
-                        <div class="info-card animate-scale-in" style="animation-delay: 0.7s;">
-                            <h4 class="font-semibold mb-3 text-xl">Organisasi ICT</h4>
-                            <p class="text-yin/70 dark:text-yang/70">Anggota aktif organisasi ICT sekolah, mengerjakan pemeliharaan teknologi termasuk sistem listrik dan jaringan.</p>
+                        <div class="text-center hover-lift cursor-pointer group">
+                            <div class="w-16 h-16 mx-auto mb-3 bg-secondary/20 rounded-full flex items-center justify-center group-hover:bg-secondary/40 transition-all">
+                                <i class="fas fa-network-wired text-3xl text-secondary"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Networking</p>
                         </div>
-                        <div class="info-card animate-scale-in" style="animation-delay: 0.9s;">
-                            <h4 class="font-semibold mb-3 text-xl">Pengembangan Web</h4>
-                            <p class="text-yin/70 dark:text-yang/70">Frontend developer yang sedang memperluas ke pengembangan backend untuk menjadi full-stack.</p>
+                        <div class="text-center hover-lift cursor-pointer group">
+                            <div class="w-16 h-16 mx-auto mb-3 bg-accent/20 rounded-full flex items-center justify-center group-hover:bg-accent/40 transition-all">
+                                <i class="fas fa-users text-3xl text-accent"></i>
+                            </div>
+                            <p class="text-sm text-gray-400">Teamwork</p>
                         </div>
-                        <div class="info-card animate-scale-in" style="animation-delay: 1.1s;">
-                            <h4 class="font-semibold mb-3 text-xl">IT Support</h4>
-                            <p class="text-yin/70 dark:text-yang/70">Memberikan dukungan teknis dan troubleshooting untuk berbagai sistem dan jaringan.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="py-20 relative">
-        <div class="container mx-auto px-4 sm:px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Keahlian <span class="gradient-text">Saya</span></h2>
-            
-            <!-- Technology Icons Showcase -->
-            <div class="flex flex-wrap justify-center gap-6 mb-12 animate-fade-in-up">
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.1s;">
-                    <i class="fab fa-html5 text-4xl text-orange-600 hover:text-orange-700 transition-colors duration-300"></i>
-                    <span class="tech-label">HTML5</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.2s;">
-                    <i class="fab fa-css3-alt text-4xl text-blue-500 hover:text-blue-600 transition-colors duration-300"></i>
-                    <span class="tech-label">CSS3</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.3s;">
-                    <i class="fab fa-js-square text-4xl text-yellow-500 hover:text-yellow-600 transition-colors duration-300"></i>
-                    <span class="tech-label">JavaScript</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.4s;">
-                    <i class="fab fa-react text-4xl text-blue-400 hover:text-blue-500 transition-colors duration-300"></i>
-                    <span class="tech-label">React</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.5s;">
-                    <i class="fab fa-node-js text-4xl text-green-600 hover:text-green-700 transition-colors duration-300"></i>
-                    <span class="tech-label">Node.js</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.6s;">
-                    <i class="fab fa-python text-4xl text-blue-400 hover:text-blue-500 transition-colors duration-300"></i>
-                    <span class="tech-label">Python</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.7s;">
-                    <i class="fab fa-php text-4xl text-purple-600 hover:text-purple-700 transition-colors duration-300"></i>
-                    <span class="tech-label">PHP</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.8s;">
-                    <i class="fab fa-git-alt text-4xl text-red-500 hover:text-red-600 transition-colors duration-300"></i>
-                    <span class="tech-label">Git</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 0.9s;">
-                    <i class="fab fa-github text-4xl text-gray-800 dark:text-gray-200 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-300"></i>
-                    <span class="tech-label">GitHub</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 1.0s;">
-                    <i class="fab fa-bootstrap text-4xl text-purple-500 hover:text-purple-600 transition-colors duration-300"></i>
-                    <span class="tech-label">Bootstrap</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 1.1s;">
-                    <i class="fas fa-database text-4xl text-gray-600 hover:text-gray-700 transition-colors duration-300"></i>
-                    <span class="tech-label">Database</span>
-                </div>
-                <div class="tech-icon-item animate-bounce-slow" style="animation-delay: 1.2s;">
-                    <i class="fab fa-linux text-4xl text-yellow-600 hover:text-yellow-700 transition-colors duration-300"></i>
-                    <span class="tech-label">Linux</span>
-                </div>
-            </div>
-            
-            <!-- React Interactive Components -->
-            <div id="react-project-showcase" class="mb-12"></div>
-            <div id="react-skill-calculator" class="mb-12"></div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <!-- Web Development Skills -->
-                <div class="skills-card animate-slide-in" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-6">
-                        <div class="skill-icon">
-                            <i class="fas fa-code text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold">Pengembangan Web</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-html5 text-orange-600 text-xl"></i>
-                                    <span class="font-medium">HTML/CSS</span>
-                                </div>
-                                <span class="skill-percentage">90%</span>
+                        <div class="text-center hover-lift cursor-pointer group">
+                            <div class="w-16 h-16 mx-auto mb-3 bg-purple-400/20 rounded-full flex items-center justify-center group-hover:bg-purple-400/40 transition-all">
+                                <i class="fas fa-trophy text-3xl text-purple-400"></i>
                             </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="90"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-js-square text-yellow-500 text-xl"></i>
-                                    <span class="font-medium">JavaScript</span>
-                                </div>
-                                <span class="skill-percentage">85%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="85"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-react text-blue-500 text-xl"></i>
-                                    <span class="font-medium">React</span>
-                                </div>
-                                <span class="skill-percentage">63%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="63"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-node-js text-green-600 text-xl"></i>
-                                    <span class="font-medium">Node.js</span>
-                                </div>
-                                <span class="skill-percentage">60%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="60"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-python text-blue-400 text-xl"></i>
-                                    <span class="font-medium">Python</span>
-                                </div>
-                                <span class="skill-percentage">68%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="68"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <div class="flex items-center gap-3">
-                                    <i class="fab fa-php text-purple-600 text-xl"></i>
-                                    <span class="font-medium">PHP</span>
-                                </div>
-                                <span class="skill-percentage">45%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="45"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- IT Support Skills -->
-                <div class="skills-card animate-slide-in" style="animation-delay: 0.4s;">
-                    <div class="flex items-center mb-6">
-                        <div class="skill-icon bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-300">
-                            <i class="fas fa-desktop text-2xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold">IT Support</h3>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <span class="font-medium">Perbaikan Hardware</span>
-                                <span class="skill-percentage">85%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="85"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <span class="font-medium">Pemeliharaan Jaringan</span>
-                                <span class="skill-percentage">45%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="45"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <span class="font-medium">Troubleshooting Software</span>
-                                <span class="skill-percentage">70%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="70"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <div class="flex justify-between mb-2">
-                                <span class="font-medium">Sistem Administrasi</span>
-                                <span class="skill-percentage">38%</span>
-                            </div>
-                            <div class="skill-bar-container">
-                                <div class="skill-bar" data-skill="38"></div>
-                            </div>
+                            <p class="text-sm text-gray-400">Achievement</p>
                         </div>
                     </div>
                 </div>
@@ -371,197 +314,308 @@
         </div>
     </section>
 
-    <!-- Experience Timeline Section -->
-    <section id="experience" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
-        <div class="container mx-auto px-4 sm:px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Pengalaman <span class="gradient-text">Saya</span></h2>
+    <!-- Class Structure (Network Topology Style) -->
+    <section id="structure" class="py-20 relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 animate-fade-in-up">
+                Struktur <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16">Seperti topologi jaringan komputer yang terkoneksi sempurna</p>
             
-            <div class="timeline-container">
-                <div class="timeline-item animate-slide-in" style="animation-delay: 0.2s;">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="text-xl font-semibold mb-2">Anggota Divisi TIK Sekolah</h3>
-                        <p class="text-sm text-gray-500 mb-3">2023 - Sekarang</p>
-                        <p class="text-yin/80 dark:text-yang/80">Bertanggung jawab dalam pemeliharaan hardware, troubleshooting jaringan, dan dukungan teknis untuk seluruh kegiatan sekolah.</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item animate-slide-in" style="animation-delay: 0.4s;">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="text-xl font-semibold mb-2">Frontend Developer (Self-taught)</h3>
-                        <p class="text-sm text-gray-500 mb-3">2022 - Sekarang</p>
-                        <p class="text-yin/80 dark:text-yang/80">Mengembangkan kemampuan dalam HTML, CSS, JavaScript, dan React melalui proyek-proyek personal dan pembelajaran mandiri.</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item animate-slide-in" style="animation-delay: 0.6s;">
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <h3 class="text-xl font-semibold mb-2">Siswa SMK Jurusan TJKT</h3>
-                        <p class="text-sm text-gray-500 mb-3">2025 - Sekarang</p>
-                        <p class="text-yin/80 dark:text-yang/80">Mendalami ilmu komputer dan teknologi informasi dengan fokus pada jaringan komputer dan telekomunikasi.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 relative">
-        <div class="container mx-auto px-4 sm:px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Proyek <span class="gradient-text">Saya</span></h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="project-card animate-scale-in" style="animation-delay: 0.2s;">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Web Development Project">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="/gallery/coding" class="project-link">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="project-link">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="text-xl font-semibold mb-3">Portfolio Website</h3>
-                        <p class="text-yin/80 dark:text-yang/80 mb-4">Website portfolio responsif dengan desain modern dan animasi interaktif menggunakan HTML, CSS, dan JavaScript.</p>
-                        <div class="project-tags">
-                            <span class="tag"><i class="fab fa-html5 mr-1 text-orange-500"></i>HTML</span>
-                            <span class="tag"><i class="fab fa-css3-alt mr-1 text-blue-500"></i>CSS</span>
-                            <span class="tag"><i class="fab fa-js-square mr-1 text-yellow-500"></i>JavaScript</span>
-                            <span class="tag"><i class="fab fa-react mr-1 text-blue-400"></i>React</span>
-                            <span class="tag"><i class="fas fa-mobile-alt mr-1 text-green-500"></i>Responsive</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="project-card animate-scale-in" style="animation-delay: 0.4s;">
-                    <div class="project-image">
-                        <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="IT Support Project">
-                        <div class="project-overlay">
-                            <div class="project-links">
-                                <a href="/gallery/ict" class="project-link">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="project-link">
-                                    <i class="fas fa-external-link-alt"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <h3 class="text-xl font-semibold mb-3">IT Support Sekolah</h3>
-                        <p class="text-yin/80 dark:text-yang/80 mb-4">Dokumentasi kegiatan pemeliharaan sistem komputer dan jaringan di lingkungan sekolah.</p>
-                        <div class="project-tags">
-                            <span class="tag"><i class="fas fa-microchip mr-1 text-gray-600"></i>Hardware</span>
-                            <span class="tag"><i class="fas fa-network-wired mr-1 text-blue-600"></i>Networking</span>
-                            <span class="tag"><i class="fas fa-tools mr-1 text-yellow-600"></i>Troubleshooting</span>
-                            <span class="tag"><i class="fas fa-server mr-1 text-green-600"></i>Server</span>
-                            <span class="tag"><i class="fab fa-windows mr-1 text-blue-500"></i>Windows</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-yang-soft dark:bg-yin-soft relative">
-        <div class="container mx-auto px-4 sm:px-6">
-            <h2 class="text-4xl font-bold text-center mb-12 animate-fade-in-up">Hubungi <span class="gradient-text">Saya</span></h2>
-            
-            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="animate-slide-in" style="animation-delay: 0.2s;">
-                    <h3 class="text-2xl font-semibold mb-6">Mari Berkolaborasi!</h3>
-                    <p class="text-yin/80 dark:text-yang/80 mb-8 leading-relaxed">
-                        Saya selalu terbuka untuk peluang baru, proyek menarik, atau sekadar berdiskusi tentang teknologi. 
-                        Jangan ragu untuk menghubungi saya!
-                    </p>
-                    
-                    <div class="space-y-4">
-                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.4s;">
-                            <i class="fas fa-envelope contact-icon"></i>
-                            <span>hilmimax109@gmail.com</span>
-                        </div>
-                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.6s;">
-                            <i class="fas fa-phone contact-icon"></i>
-                            <span>+62 815-7464-7741</span>
-                        </div>
-                        <div class="contact-info animate-fade-in-up" style="animation-delay: 0.8s;">
-                            <i class="fas fa-map-marker-alt contact-icon"></i>
-                            <span>Indonesia</span>
+            <div class="max-w-6xl mx-auto">
+                <!-- Network Topology Visualization -->
+                <div id="network-topology" class="relative min-h-[600px] glass-card rounded-3xl p-8 mb-12">
+                    <!-- Core (Wali Kelas) -->
+                    <div class="network-node bg-gradient-to-br from-yellow-400 to-orange-500 shadow-lg" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-tooltip="{{ structure.core.name }}">
+                        <div class="text-center">
+                            <i class="fas fa-{{ structure.core.icon }} text-3xl text-white"></i>
+                            <p class="text-xs mt-1 font-semibold text-white">Core</p>
                         </div>
                     </div>
                     
-                    <div class="social-links mt-8">
-                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1s;">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1.2s;">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
-                        <a href="#" class="social-link animate-bounce-slow" style="animation-delay: 1.4s;">
-                            <i class="fab fa-instagram"></i>
-                        </a>
+                    <!-- Officers Layer -->
+                    {% for officer in structure.officers %}
+                    <div class="network-node bg-gradient-to-br from-{{ officer.color }}-400 to-{{ officer.color }}-600 shadow-lg" 
+                         style="top: 30%; left: {{ 20 + loop.index0 * 20 }}%;" 
+                         data-tooltip="{{ officer.position }}: {{ officer.name }}">
+                        <div class="text-center">
+                            <i class="fas fa-{{ officer.icon }} text-2xl text-white"></i>
+                            <p class="text-xs mt-1 font-semibold text-white">{{ officer.position.split()[0] }}</p>
+                        </div>
                     </div>
+                    {% endfor %}
+                    
+                    <!-- Divisions Layer -->
+                    {% for division in structure.divisions %}
+                    <div class="network-node bg-gradient-to-br from-{{ division.color }}-400 to-{{ division.color }}-600 shadow-lg" 
+                         style="bottom: 15%; left: {{ 15 + loop.index0 * 20 }}%;" 
+                         data-tooltip="{{ division.name }}">
+                        <div class="text-center">
+                            <i class="fas fa-{{ division.icon }} text-xl text-white"></i>
+                            <p class="text-xs mt-1 font-semibold text-white">{{ division.name.split()[1] }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
                 
-                <div class="animate-slide-in" style="animation-delay: 0.4s;">
-                    <!-- Email Service Info -->
-                    <div class="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                        <div class="flex items-center gap-3 mb-2">
-                            <i class="fas fa-envelope text-blue-600 dark:text-blue-400"></i>
-                            <span class="font-medium text-blue-800 dark:text-blue-200">📧 Email Langsung ke hilmimax109@gmail.com</span>
+                <!-- Structure Details Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Officers -->
+                    <div class="glass-card p-6 rounded-2xl animate-slide-in-left hover-lift">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                            <i class="fas fa-star text-primary"></i>
+                            Pengurus Inti
+                        </h3>
+                        <div class="space-y-3">
+                            {% for officer in structure.officers %}
+                            <div class="flex items-center gap-3 bg-dark-card/50 p-3 rounded-lg hover:bg-dark-hover/50 transition-all cursor-pointer">
+                                <div class="w-10 h-10 bg-{{ officer.color }}-500/20 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-{{ officer.icon }} text-{{ officer.color }}-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-sm">{{ officer.position }}</p>
+                                    <p class="text-xs text-gray-400">{{ officer.name }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
                         </div>
-                        <p class="text-sm text-blue-700 dark:text-blue-300">Pesan Anda akan dikirim langsung ke email saya menggunakan EmailJS yang gratis dan aman!</p>
                     </div>
                     
-                    <form id="contact-form" class="contact-form">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Nama Lengkap</label>
-                            <input type="text" id="name" name="name" class="form-input" required placeholder="Masukkan nama lengkap Anda">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email" class="form-label">Email Address</label>
-                            <input type="email" id="email" name="email" class="form-input" required placeholder="email@example.com">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message" class="form-label">Pesan/Feedback</label>
-                            <textarea id="message" name="message" rows="6" class="form-input" required placeholder="Tulis feedback, saran, atau pesan Anda di sini... (maks 500 karakter)"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="form-submit">
-                            <span class="submit-text">📨 Kirim ke Gmail</span>
-                            <div class="submit-loader hidden">
-                                <i class="fas fa-spinner fa-spin"></i>
+                    <!-- Divisions -->
+                    <div class="glass-card p-6 rounded-2xl animate-slide-in-right hover-lift">
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                            <i class="fas fa-users text-secondary"></i>
+                            Divisi Kelas
+                        </h3>
+                        <div class="space-y-3">
+                            {% for division in structure.divisions %}
+                            <div class="bg-dark-card/50 p-3 rounded-lg hover:bg-dark-hover/50 transition-all cursor-pointer">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class="fas fa-{{ division.icon }} text-{{ division.color }}-400"></i>
+                                    <p class="font-semibold text-sm">{{ division.name }}</p>
+                                </div>
+                                <div class="flex flex-wrap gap-2 ml-6">
+                                    {% for member in division.members %}
+                                    <span class="text-xs bg-{{ division.color }}-500/20 text-{{ division.color }}-300 px-2 py-1 rounded">{{ member }}</span>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </button>
-                        
-                        <div id="form-response" class="hidden"></div>
-                    </form>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Homeroom Teacher Section -->
+    <section id="teacher" class="py-20 bg-dark-card/30 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 animate-fade-in-up">
+                Wali <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
+            </h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="glass-card p-8 md:p-12 rounded-3xl text-center animate-scale-in hover-lift">
+                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-user-tie text-5xl text-white"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold mb-2">{{ teacher.name }}</h3>
+                    <p class="text-primary mb-4">{{ teacher.subject }}</p>
+                    <div class="max-w-2xl mx-auto mb-6">
+                        <p class="text-lg text-gray-300 italic mb-4">"{{ teacher.quote }}"</p>
+                        <p class="text-gray-400">{{ teacher.description }}</p>
+                    </div>
+                    <a href="mailto:{{ teacher.email }}" class="inline-flex items-center gap-2 bg-primary/20 hover:bg-primary/30 px-6 py-3 rounded-full transition-all">
+                        <i class="fas fa-envelope"></i>
+                        <span>{{ teacher.email }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Albums Section -->
+    <section id="albums" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 animate-fade-in-up">
+                Album <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
+            </h2>
+            <p class="text-center text-gray-400 mb-16">Kenangan indah perjalanan kami</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for album_key, album in albums.items() %}
+                <a href="/album/{{ album_key }}" class="group">
+                    <div class="glass-card rounded-2xl overflow-hidden hover-lift transform transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-primary/20">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="{{ album.images[0].url }}" alt="{{ album.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-bg via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-primary/80 px-3 py-1 rounded-full text-sm font-semibold">
+                                {{ album.images|length }} Foto
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{{ album.title }}</h3>
+                            <p class="text-gray-400 text-sm mb-4">{{ album.description }}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500 uppercase tracking-wider">{{ album.category }}</span>
+                                <i class="fas fa-arrow-right text-primary group-hover:translate-x-2 transition-transform"></i>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="py-8 bg-yin dark:bg-yang text-yang dark:text-yin">
-        <div class="container mx-auto px-4 sm:px-6 text-center">
-            <p class="animate-fade-in-up">&copy; 2025 M. Hilmi firjatullah adi. Semua hak cipta dilindungi.</p>
+    <footer class="py-12 bg-dark-card/50 border-t border-primary/20">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
+                    {{ class_data.name }}
+                </h3>
+                <p class="text-gray-400">{{ class_data.full_name }}</p>
+            </div>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="w-10 h-10 bg-dark-card hover:bg-primary rounded-full flex items-center justify-center transition-all hover:scale-110">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-dark-card hover:bg-primary rounded-full flex items-center justify-center transition-all hover:scale-110">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-dark-card hover:bg-primary rounded-full flex items-center justify-center transition-all hover:scale-110">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            <p class="text-gray-500 text-sm">
+                Made with <i class="fas fa-heart text-red-500 animate-pulse"></i> by {{ class_data.name }}
+                <br>
+                <span class="text-xs">© {{ class_data.year }} - All rights reserved</span>
+            </p>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
     <script src="{{ url_for('static', filename='js/three-scene.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/react-components.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/emailjs-integration.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+    
+    <script>
+        // Mobile Menu Toggle
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu')?.classList.add('hidden');
+                }
+            });
+        });
+        
+        // Create Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'sparkle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(particle);
+            }
+        }
+        
+        // Network Topology Animation
+        function animateNetworkLines() {
+            const topology = document.getElementById('network-topology');
+            const nodes = topology.querySelectorAll('.network-node');
+            const core = nodes[0];
+            
+            Array.from(nodes).slice(1).forEach((node, index) => {
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                
+                const coreRect = core.getBoundingClientRect();
+                const nodeRect = node.getBoundingClientRect();
+                const topologyRect = topology.getBoundingClientRect();
+                
+                const x1 = coreRect.left - topologyRect.left + coreRect.width / 2;
+                const y1 = coreRect.top - topologyRect.top + coreRect.height / 2;
+                const x2 = nodeRect.left - topologyRect.left + nodeRect.width / 2;
+                const y2 = nodeRect.top - topologyRect.top + nodeRect.height / 2;
+                
+                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                
+                line.style.width = length + 'px';
+                line.style.left = x1 + 'px';
+                line.style.top = y1 + 'px';
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.animationDelay = (index * 0.1) + 's';
+                
+                topology.appendChild(line);
+            });
+        }
+        
+        // Tooltip for network nodes
+        document.querySelectorAll('.network-node').forEach(node => {
+            node.addEventListener('mouseenter', (e) => {
+                const tooltip = e.currentTarget.getAttribute('data-tooltip');
+                if (tooltip) {
+                    const tip = document.createElement('div');
+                    tip.className = 'absolute bg-dark-card text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap z-50 -top-12 left-1/2 transform -translate-x-1/2';
+                    tip.textContent = tooltip;
+                    tip.id = 'node-tooltip';
+                    e.currentTarget.appendChild(tip);
+                }
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                document.getElementById('node-tooltip')?.remove();
+            });
+        });
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                }, 500);
+            }, 1000);
+            
+            createParticles();
+            setTimeout(() => animateNetworkLines(), 500);
+        });
+        
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.animate-fade-in-up, .animate-scale-in, .animate-slide-in-left, .animate-slide-in-right').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

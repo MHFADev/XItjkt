@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.title }} - {{ class_data.name }}</title>
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#8B5CF6',
+                        'primary-dark': '#7C3AED',
+                        'secondary': '#EC4899',
+                        'accent': '#10B981',
+                        'dark-bg': '#0f172a',
+                        'dark-card': '#1e293b',
+                        'dark-hover': '#334155'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+        
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .zoom-in {
+            animation: zoomIn 0.3s ease-out;
+        }
+        
+        .photo-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .photo-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white">
+    <!-- Back Button (Floating) -->
+    <a href="/" class="fixed top-6 left-6 z-40 w-12 h-12 bg-dark-card hover:bg-primary rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110">
+        <i class="fas fa-arrow-left text-xl"></i>
+    </a>
+    
+    <!-- Support Dev Button -->
+    <a href="https://saweria.co/YOURUSERNAME" target="_blank" class="fixed bottom-6 right-6 z-40 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 flex items-center gap-2">
+        <i class="fas fa-heart animate-pulse"></i>
+        <span class="font-semibold hidden sm:inline">Support Dev</span>
+    </a>
+    
+    <!-- Header -->
+    <header class="pt-24 pb-16 bg-gradient-to-b from-dark-card/50 to-transparent">
+        <div class="container mx-auto px-4 text-center">
+            <div class="inline-block bg-primary/20 px-4 py-2 rounded-full mb-4">
+                <span class="text-primary font-semibold uppercase text-sm tracking-wider">{{ data.category }}</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                {{ data.title }}
+            </h1>
+            <p class="text-xl text-gray-400 max-w-2xl mx-auto">{{ data.description }}</p>
+        </div>
+    </header>
+    
+    <!-- Photo Gallery -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for image in data.images %}
+                <div class="photo-card glass-card rounded-2xl overflow-hidden" onclick="openLightbox({{ loop.index0 }})">
+                    <div class="relative h-80">
+                        <img src="{{ image.url }}" alt="{{ image.title }}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-bg via-transparent to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
+                            <div class="absolute bottom-0 left-0 right-0 p-6">
+                                <h3 class="text-xl font-bold mb-2">{{ image.title }}</h3>
+                                <p class="text-sm text-gray-300">{{ image.description }}</p>
+                                <p class="text-xs text-gray-500 mt-2">{{ image.date }}</p>
+                            </div>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-primary/80 p-2 rounded-full opacity-0 hover:opacity-100 transition-opacity">
+                            <i class="fas fa-search-plus"></i>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold mb-1">{{ image.title }}</h3>
+                        <p class="text-sm text-gray-400 line-clamp-2">{{ image.description }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all z-10" onclick="closeLightbox()">
+            <i class="fas fa-times text-2xl"></i>
+        </button>
+        
+        <button class="absolute left-6 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all z-10" onclick="event.stopPropagation(); previousImage()">
+            <i class="fas fa-chevron-left text-2xl"></i>
+        </button>
+        
+        <button class="absolute right-6 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all z-10" onclick="event.stopPropagation(); nextImage()">
+            <i class="fas fa-chevron-right text-2xl"></i>
+        </button>
+        
+        <div class="text-center" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="" class="zoom-in">
+            <div class="mt-4 max-w-2xl mx-auto">
+                <h3 id="lightbox-title" class="text-2xl font-bold mb-2"></h3>
+                <p id="lightbox-desc" class="text-gray-400"></p>
+                <p id="lightbox-date" class="text-sm text-gray-500 mt-2"></p>
+            </div>
+            <div id="lightbox-counter" class="mt-4 text-gray-400"></div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="py-12 bg-dark-card/50 border-t border-primary/20 mt-20">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-500">
+                <a href="/" class="text-primary hover:text-primary-dark transition-colors">← Kembali ke Beranda</a>
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        const images = {{ data.images | tojson }};
+        let currentIndex = 0;
+        
+        function openLightbox(index) {
+            currentIndex = index;
+            updateLightbox();
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox();
+        }
+        
+        function previousImage() {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        }
+        
+        function updateLightbox() {
+            const image = images[currentIndex];
+            const img = document.getElementById('lightbox-img');
+            
+            // Add zoom animation
+            img.classList.remove('zoom-in');
+            void img.offsetWidth; // Trigger reflow
+            img.classList.add('zoom-in');
+            
+            img.src = image.url;
+            img.alt = image.title;
+            document.getElementById('lightbox-title').textContent = image.title;
+            document.getElementById('lightbox-desc').textContent = image.description;
+            document.getElementById('lightbox-date').textContent = image.date;
+            document.getElementById('lightbox-counter').textContent = `${currentIndex + 1} / ${images.length}`;
+        }
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'ArrowLeft') previousImage();
+        });
+        
+        // Prevent scroll on arrow keys when lightbox is open
+        window.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active') && 
+                ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

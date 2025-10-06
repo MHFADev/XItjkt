@@ -1,4 +1,4 @@
-// Three.js 3D Background Scene
+// Three.js 3D Background Scene - TJKT Network Theme
 class ThreeScene {
     constructor() {
         this.scene = null;
@@ -35,345 +35,339 @@ class ThreeScene {
 
     setupRenderer() {
         const canvas = document.getElementById('three-canvas');
-        this.renderer = new THREE.WebGLRenderer({
-            canvas: canvas,
-            alpha: true,
-            antialias: true
-        });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        if (!canvas) {
+            console.warn('Three.js canvas not found');
+            return;
+        }
+        
+        try {
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true,
+                failIfMajorPerformanceCaveat: false
+            });
+            this.renderer.setSize(window.innerWidth, window.innerHeight);
+            this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        } catch (error) {
+            console.warn('WebGL not available, hiding canvas:', error);
+            canvas.style.display = 'none';
+            this.renderer = null;
+        }
     }
 
     setupLights() {
-        // Ambient light
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // Ambient light with purple tint
+        const ambientLight = new THREE.AmbientLight(0x8B5CF6, 0.5);
         this.scene.add(ambientLight);
 
-        // Directional light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(1, 1, 1);
-        this.scene.add(directionalLight);
+        // Directional lights with networking theme colors
+        const directionalLight1 = new THREE.DirectionalLight(0x8B5CF6, 0.8);
+        directionalLight1.position.set(5, 5, 5);
+        this.scene.add(directionalLight1);
+        
+        const directionalLight2 = new THREE.DirectionalLight(0xEC4899, 0.5);
+        directionalLight2.position.set(-5, -5, 5);
+        this.scene.add(directionalLight2);
     }
 
     createObjects() {
-        // Create floating geometric shapes
-        this.createFloatingShapes();
-        this.createParticles();
-        this.createWaveform();
-        this.createYinYang3D();
+        this.createNetworkNodes();
+        this.createServerRacks();
+        this.createDataPackets();
+        this.createNetworkGrid();
+        this.createFloatingIcons();
     }
 
-    createFloatingShapes() {
-        const shapes = [
-            { geometry: new THREE.BoxGeometry(0.5, 0.5, 0.5), position: [-3, 2, -2] },
-            { geometry: new THREE.SphereGeometry(0.3, 32, 32), position: [3, -1, -3] },
-            { geometry: new THREE.ConeGeometry(0.3, 0.8, 8), position: [-2, -2, -1] },
-            { geometry: new THREE.OctahedronGeometry(0.4), position: [2, 1, -2] },
-            { geometry: new THREE.TorusGeometry(0.3, 0.1, 8, 16), position: [0, 3, -4] }
+    createNetworkNodes() {
+        // Create router/switch-like nodes
+        const nodeGeometry = new THREE.BoxGeometry(0.6, 0.4, 0.3);
+        const positions = [
+            [-3, 2, -2],
+            [3, -1, -3],
+            [-2, -2, -1],
+            [2, 1, -2],
+            [0, 3, -4]
         ];
+        
+        const colors = [0x8B5CF6, 0xEC4899, 0x10B981, 0x3B82F6, 0xF59E0B];
 
-        shapes.forEach((shape, index) => {
-            const isDark = document.documentElement.classList.contains('dark');
+        positions.forEach((position, index) => {
             const material = new THREE.MeshLambertMaterial({
-                color: isDark ? 0xffffff : 0x000000,
-                opacity: 0.1,
-                transparent: true
+                color: colors[index],
+                opacity: 0.7,
+                transparent: true,
+                emissive: colors[index],
+                emissiveIntensity: 0.3
             });
 
-            const mesh = new THREE.Mesh(shape.geometry, material);
-            mesh.position.set(...shape.position);
-            mesh.userData = { 
-                originalPosition: [...shape.position],
+            const node = new THREE.Mesh(nodeGeometry, material);
+            node.position.set(...position);
+            node.userData = {
+                originalPosition: [...position],
                 rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.01,
+                    y: (Math.random() - 0.5) * 0.02,
+                    z: (Math.random() - 0.5) * 0.01
+                },
+                floatSpeed: Math.random() * 0.008 + 0.004,
+                floatOffset: index * Math.PI / 3,
+                type: 'networkNode'
+            };
+            
+            // Add LED lights effect
+            const ledGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+            const ledMaterial = new THREE.MeshLambertMaterial({
+                color: 0x00ff00,
+                emissive: 0x00ff00,
+                emissiveIntensity: 1
+            });
+            
+            for (let i = 0; i < 3; i++) {
+                const led = new THREE.Mesh(ledGeometry, ledMaterial);
+                led.position.set(0.25, 0.15 - i * 0.15, 0.16);
+                node.add(led);
+                
+                led.userData = {
+                    blinkOffset: i * Math.PI / 3,
+                    blinkSpeed: 0.05
+                };
+            }
+            
+            this.scene.add(node);
+            this.objects.push(node);
+        });
+    }
+
+    createServerRacks() {
+        // Create server rack representations
+        for (let i = 0; i < 2; i++) {
+            const rackGroup = new THREE.Group();
+            
+            // Main server body
+            const serverGeometry = new THREE.BoxGeometry(0.8, 1.2, 0.4);
+            const serverMaterial = new THREE.MeshLambertMaterial({
+                color: 0x1e293b,
+                opacity: 0.8,
+                transparent: true
+            });
+            
+            const server = new THREE.Mesh(serverGeometry, serverMaterial);
+            rackGroup.add(server);
+            
+            // Add server slots (horizontal lines)
+            for (let j = 0; j < 8; j++) {
+                const slotGeometry = new THREE.BoxGeometry(0.82, 0.05, 0.42);
+                const slotMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x8B5CF6,
+                    opacity: 0.5,
+                    transparent: true
+                });
+                const slot = new THREE.Mesh(slotGeometry, slotMaterial);
+                slot.position.y = -0.5 + (j * 0.15);
+                rackGroup.add(slot);
+            }
+            
+            rackGroup.position.set(
+                i === 0 ? -4 : 4,
+                0,
+                -6
+            );
+            
+            rackGroup.userData = {
+                originalPosition: [rackGroup.position.x, rackGroup.position.y, rackGroup.position.z],
+                rotationSpeed: { x: 0, y: 0.005, z: 0 },
+                floatSpeed: 0.003,
+                floatOffset: i * Math.PI,
+                type: 'server'
+            };
+            
+            this.scene.add(rackGroup);
+            this.objects.push(rackGroup);
+        }
+    }
+
+    createDataPackets() {
+        // Create small data packet cubes flying around
+        const packetCount = 30;
+        
+        for (let i = 0; i < packetCount; i++) {
+            const size = Math.random() * 0.1 + 0.05;
+            const packetGeometry = new THREE.BoxGeometry(size, size, size);
+            const packetMaterial = new THREE.MeshBasicMaterial({
+                color: Math.random() > 0.5 ? 0x8B5CF6 : 0xEC4899,
+                opacity: 0.6,
+                transparent: true
+            });
+            
+            const packet = new THREE.Mesh(packetGeometry, packetMaterial);
+            packet.position.set(
+                (Math.random() - 0.5) * 15,
+                (Math.random() - 0.5) * 10,
+                (Math.random() - 0.5) * 10
+            );
+            
+            packet.userData = {
+                velocity: {
                     x: (Math.random() - 0.5) * 0.02,
                     y: (Math.random() - 0.5) * 0.02,
                     z: (Math.random() - 0.5) * 0.02
                 },
-                floatSpeed: Math.random() * 0.01 + 0.005,
-                floatOffset: index * Math.PI / 3
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.05,
+                    y: (Math.random() - 0.5) * 0.05,
+                    z: (Math.random() - 0.5) * 0.05
+                },
+                type: 'dataPacket'
             };
             
-            this.scene.add(mesh);
-            this.objects.push(mesh);
-        });
-    }
-
-    createParticles() {
-        const particleCount = 100;
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-
-        for (let i = 0; i < particleCount; i++) {
-            const i3 = i * 3;
-            
-            // Position
-            positions[i3] = (Math.random() - 0.5) * 20;
-            positions[i3 + 1] = (Math.random() - 0.5) * 20;
-            positions[i3 + 2] = (Math.random() - 0.5) * 20;
-
-            // Color
-            const isDark = document.documentElement.classList.contains('dark');
-            const color = isDark ? 1 : 0;
-            colors[i3] = color;
-            colors[i3 + 1] = color;
-            colors[i3 + 2] = color;
+            this.scene.add(packet);
+            this.objects.push(packet);
         }
-
-        const particleGeometry = new THREE.BufferGeometry();
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.02,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.6
-        });
-
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        this.scene.add(particles);
-        this.objects.push(particles);
     }
 
-    createWaveform() {
-        const waveGeometry = new THREE.PlaneGeometry(10, 10, 50, 50);
-        const positions = waveGeometry.attributes.position.array;
+    createNetworkGrid() {
+        // Create grid pattern representing network topology
+        const gridSize = 10;
+        const divisions = 20;
+        const gridHelper = new THREE.GridHelper(gridSize, divisions, 0x8B5CF6, 0x334155);
+        gridHelper.position.y = -3;
+        gridHelper.material.opacity = 0.2;
+        gridHelper.material.transparent = true;
         
-        // Store original positions for wave animation
-        waveGeometry.userData = { originalPositions: [...positions] };
-
-        const isDark = document.documentElement.classList.contains('dark');
-        const waveMaterial = new THREE.MeshLambertMaterial({
-            color: isDark ? 0xffffff : 0x000000,
-            opacity: 0.05,
-            transparent: true,
-            wireframe: true
-        });
-
-        const wave = new THREE.Mesh(waveGeometry, waveMaterial);
-        wave.rotation.x = -Math.PI / 4;
-        wave.position.z = -8;
-        
-        this.scene.add(wave);
-        this.objects.push(wave);
+        this.scene.add(gridHelper);
+        this.objects.push(gridHelper);
     }
 
-    createYinYang3D() {
-        // Create main yin-yang circle
-        const yinYangGroup = new THREE.Group();
+    createFloatingIcons() {
+        // Create WiFi signal icon representation
+        const wifiGroup = new THREE.Group();
         
-        // Yin side (black)
-        const yinGeometry = new THREE.CylinderGeometry(2, 2, 0.3, 32, 1, false, 0, Math.PI);
-        const yinMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0x000000,
-            transparent: true,
-            opacity: 0.8
-        });
-        const yinMesh = new THREE.Mesh(yinGeometry, yinMaterial);
-        yinMesh.rotation.y = Math.PI;
-        yinYangGroup.add(yinMesh);
+        for (let i = 0; i < 3; i++) {
+            const arcGeometry = new THREE.TorusGeometry(
+                0.3 + i * 0.2,
+                0.05,
+                8,
+                16,
+                Math.PI
+            );
+            const arcMaterial = new THREE.MeshBasicMaterial({
+                color: 0x10B981,
+                opacity: 0.7 - i * 0.2,
+                transparent: true
+            });
+            const arc = new THREE.Mesh(arcGeometry, arcMaterial);
+            arc.rotation.x = Math.PI / 2;
+            arc.position.y = -0.1 - i * 0.1;
+            wifiGroup.add(arc);
+        }
         
-        // Yang side (white)
-        const yangGeometry = new THREE.CylinderGeometry(2, 2, 0.3, 32, 1, false, 0, Math.PI);
-        const yangMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.8
-        });
-        const yangMesh = new THREE.Mesh(yangGeometry, yangMaterial);
-        yinYangGroup.add(yangMesh);
-        
-        // Small yin circle (white dot on black side)
-        const smallYinGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.31, 32);
-        const smallYinMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0xffffff,
-            transparent: true,
-            opacity: 0.9
-        });
-        const smallYinMesh = new THREE.Mesh(smallYinGeometry, smallYinMaterial);
-        smallYinMesh.position.set(-1, 0, 0);
-        yinYangGroup.add(smallYinMesh);
-        
-        // Small yang circle (black dot on white side)
-        const smallYangGeometry = new THREE.CylinderGeometry(0.5, 0.5, 0.31, 32);
-        const smallYangMaterial = new THREE.MeshLambertMaterial({ 
-            color: 0x000000,
-            transparent: true,
-            opacity: 0.9
-        });
-        const smallYangMesh = new THREE.Mesh(smallYangGeometry, smallYangMaterial);
-        smallYangMesh.position.set(1, 0, 0);
-        yinYangGroup.add(smallYangMesh);
-        
-        // Large yin semicircle (black on white side)
-        const largeYinGeometry = new THREE.CylinderGeometry(1, 1, 0.31, 32, 1, false, 0, Math.PI);
-        const largeYinMesh = new THREE.Mesh(largeYinGeometry, yinMaterial);
-        largeYinMesh.position.set(1, 0, 0);
-        largeYinMesh.rotation.y = Math.PI;
-        yinYangGroup.add(largeYinMesh);
-        
-        // Large yang semicircle (white on black side)
-        const largeYangGeometry = new THREE.CylinderGeometry(1, 1, 0.31, 32, 1, false, 0, Math.PI);
-        const largeYangMesh = new THREE.Mesh(largeYangGeometry, yangMaterial);
-        largeYangMesh.position.set(-1, 0, 0);
-        yinYangGroup.add(largeYangMesh);
-        
-        // Position the yin-yang in the background
-        yinYangGroup.position.set(0, 0, -10);
-        yinYangGroup.rotation.x = Math.PI / 2;
-        
-        // Store reference for animation
-        yinYangGroup.userData = {
-            isYinYang: true,
-            rotationSpeed: 0.005
+        wifiGroup.position.set(0, 0, -8);
+        wifiGroup.scale.setScalar(0.5);
+        wifiGroup.userData = {
+            rotationSpeed: { x: 0, y: 0.01, z: 0 },
+            type: 'wifi'
         };
         
-        this.scene.add(yinYangGroup);
-        this.objects.push(yinYangGroup);
-        
-        // Create multiple smaller yin-yang symbols floating around
-        for (let i = 0; i < 3; i++) {
-            const smallYinYang = yinYangGroup.clone();
-            smallYinYang.scale.setScalar(0.3);
-            smallYinYang.position.set(
-                (Math.random() - 0.5) * 15,
-                (Math.random() - 0.5) * 10,
-                -15 + Math.random() * -5
-            );
-            smallYinYang.userData = {
-                isYinYang: true,
-                rotationSpeed: 0.01 + Math.random() * 0.02,
-                floatSpeed: 0.002 + Math.random() * 0.005,
-                floatOffset: i * Math.PI / 1.5,
-                originalPosition: [...smallYinYang.position.toArray()]
-            };
-            
-            this.scene.add(smallYinYang);
-            this.objects.push(smallYinYang);
-        }
+        this.scene.add(wifiGroup);
+        this.objects.push(wifiGroup);
     }
 
     setupEventListeners() {
-        // Mouse movement
         window.addEventListener('mousemove', (event) => {
             this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
             this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // Window resize
         window.addEventListener('resize', () => {
+            if (!this.camera || !this.renderer) return;
             this.camera.aspect = window.innerWidth / window.innerHeight;
             this.camera.updateProjectionMatrix();
             this.renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        // Theme change
-        const themeToggle = document.getElementById('theme-toggle');
-        themeToggle?.addEventListener('click', () => {
-            setTimeout(() => {
-                this.updateThemeColors();
-            }, 100);
-        });
-    }
-
-    updateThemeColors() {
-        const isDark = document.documentElement.classList.contains('dark');
-        
-        this.objects.forEach(object => {
-            // Skip yin-yang objects as they should maintain their black/white colors
-            if (object.userData && object.userData.isYinYang) {
-                return;
-            }
-            
-            if (object.material) {
-                if (object.material.color) {
-                    object.material.color.setHex(isDark ? 0xffffff : 0x000000);
-                }
-                if (object.material.vertexColors && object.geometry.attributes.color) {
-                    const colors = object.geometry.attributes.color.array;
-                    const color = isDark ? 1 : 0;
-                    
-                    for (let i = 0; i < colors.length; i += 3) {
-                        colors[i] = color;
-                        colors[i + 1] = color;
-                        colors[i + 2] = color;
-                    }
-                    object.geometry.attributes.color.needsUpdate = true;
-                }
-            }
-        });
     }
 
     animate() {
+        if (!this.renderer || !this.camera || !this.scene) {
+            return;
+        }
         requestAnimationFrame(() => this.animate());
+
 
         const time = Date.now() * 0.001;
 
-        // Animate floating shapes
-        this.objects.forEach((object, index) => {
-            if (object.userData && object.userData.rotationSpeed) {
-                // Rotation
-                object.rotation.x += object.userData.rotationSpeed.x;
-                object.rotation.y += object.userData.rotationSpeed.y;
-                object.rotation.z += object.userData.rotationSpeed.z;
-
-                // Floating movement
-                if (object.userData.originalPosition && Array.isArray(object.userData.originalPosition)) {
-                    const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 0.5;
-                    object.position.y = object.userData.originalPosition[1] + floatY;
-                }
-
-                // Mouse interaction
-                const mouseInfluence = 0.1;
-                object.position.x += (this.mouse.x * mouseInfluence - object.position.x) * 0.05;
-                object.rotation.y += this.mouse.x * 0.01;
-            }
-
-            // Animate particles
-            if (object.type === 'Points') {
-                object.rotation.y += 0.002;
-                object.rotation.x += 0.001;
-            }
-
-            // Animate wave
-            if (object.geometry && object.geometry.userData && object.geometry.userData.originalPositions) {
-                const positions = object.geometry.attributes.position.array;
-                const originalPositions = object.geometry.userData.originalPositions;
-
-                for (let i = 0; i < positions.length; i += 3) {
-                    const x = originalPositions[i];
-                    const y = originalPositions[i + 1];
-                    
-                    positions[i + 2] = Math.sin((x + time) * 0.5) * Math.cos((y + time) * 0.5) * 0.1;
+        this.objects.forEach((object) => {
+            const userData = object.userData;
+            
+            if (userData.type === 'networkNode') {
+                // Rotate network nodes
+                if (userData.rotationSpeed) {
+                    object.rotation.x += userData.rotationSpeed.x;
+                    object.rotation.y += userData.rotationSpeed.y;
+                    object.rotation.z += userData.rotationSpeed.z;
                 }
                 
-                object.geometry.attributes.position.needsUpdate = true;
+                // Float animation
+                if (userData.originalPosition && userData.floatSpeed) {
+                    const floatY = Math.sin(time * userData.floatSpeed + userData.floatOffset) * 0.3;
+                    object.position.y = userData.originalPosition[1] + floatY;
+                }
+                
+                // Animate LED lights
+                object.children.forEach((led) => {
+                    if (led.userData.blinkOffset !== undefined) {
+                        const blink = Math.sin(time * led.userData.blinkSpeed + led.userData.blinkOffset);
+                        led.material.emissiveIntensity = (blink + 1) * 0.5 + 0.5;
+                    }
+                });
             }
             
-            // Animate yin-yang symbols
-            if (object.userData && object.userData.isYinYang) {
-                // Main rotation
-                object.rotation.z += object.userData.rotationSpeed;
-                
-                // Floating movement for smaller yin-yangs
-                if (object.userData.floatSpeed && object.userData.originalPosition && Array.isArray(object.userData.originalPosition)) {
-                    const floatY = Math.sin(time * object.userData.floatSpeed + object.userData.floatOffset) * 2;
-                    const floatX = Math.cos(time * object.userData.floatSpeed * 0.7 + object.userData.floatOffset) * 1;
-                    
-                    object.position.x = object.userData.originalPosition[0] + floatX;
-                    object.position.y = object.userData.originalPosition[1] + floatY;
-                    
-                    // Additional rotation for smaller ones
-                    object.rotation.x += 0.002;
-                    object.rotation.y += 0.003;
+            if (userData.type === 'server') {
+                // Rotate servers slowly
+                if (userData.rotationSpeed) {
+                    object.rotation.y += userData.rotationSpeed.y;
                 }
+                
+                // Float animation
+                if (userData.originalPosition && userData.floatSpeed) {
+                    const floatY = Math.sin(time * userData.floatSpeed + userData.floatOffset) * 0.5;
+                    object.position.y = userData.originalPosition[1] + floatY;
+                }
+            }
+            
+            if (userData.type === 'dataPacket') {
+                // Move data packets
+                object.position.x += userData.velocity.x;
+                object.position.y += userData.velocity.y;
+                object.position.z += userData.velocity.z;
+                
+                // Bounce off boundaries
+                if (Math.abs(object.position.x) > 7) userData.velocity.x *= -1;
+                if (Math.abs(object.position.y) > 5) userData.velocity.y *= -1;
+                if (Math.abs(object.position.z) > 5) userData.velocity.z *= -1;
+                
+                // Rotate packets
+                object.rotation.x += userData.rotationSpeed.x;
+                object.rotation.y += userData.rotationSpeed.y;
+                object.rotation.z += userData.rotationSpeed.z;
+            }
+            
+            if (userData.type === 'wifi') {
+                // Rotate WiFi icon
+                object.rotation.y += userData.rotationSpeed.y;
+                
+                // Pulse animation
+                const scale = 0.5 + Math.sin(time * 2) * 0.1;
+                object.scale.setScalar(scale);
             }
         });
 
         // Camera movement based on mouse
-        this.camera.position.x += (this.mouse.x * 0.5 - this.camera.position.x) * 0.05;
-        this.camera.position.y += (-this.mouse.y * 0.5 - this.camera.position.y) * 0.05;
-        this.camera.lookAt(this.scene.position);
+        if (this.camera) {
+            this.camera.position.x += (this.mouse.x * 0.5 - this.camera.position.x) * 0.05;
+            this.camera.position.y += (-this.mouse.y * 0.5 - this.camera.position.y) * 0.05;
+            this.camera.lookAt(this.scene.position);
+        }
 
         this.renderer.render(this.scene, this.camera);
     }
@@ -381,12 +375,18 @@ class ThreeScene {
 
 // Initialize Three.js scene when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if WebGL is supported
-    if (window.THREE && window.WebGLRenderingContext) {
+    if (window.THREE) {
         try {
             new ThreeScene();
         } catch (error) {
             console.warn('Three.js scene could not be initialized:', error);
+            // Hide canvas on error
+            const canvas = document.getElementById('three-canvas');
+            if (canvas) canvas.style.display = 'none';
         }
+    } else {
+        console.warn('Three.js library not loaded');
+        const canvas = document.getElementById('three-canvas');
+        if (canvas) canvas.style.display = 'none';
     }
 });

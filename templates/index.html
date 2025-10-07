@@ -251,34 +251,34 @@
                 <div class="cute-badge mb-6">
                     <i class="fas fa-network-wired mr-2"></i>Kelas Terbaik
                 </div>
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-fade-in">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-fade-in px-4">
                     {{ class_data.name }}
                 </h1>
-                <h2 class="text-2xl md:text-3xl mb-4 text-gray-300 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <h2 class="text-xl md:text-2xl lg:text-3xl mb-3 md:mb-4 text-gray-300 animate-fade-in-up px-4" style="animation-delay: 0.2s;">
                     {{ class_data.full_name }}
                 </h2>
-                <p class="text-xl md:text-2xl mb-8 text-primary cute-font animate-fade-in-up" style="animation-delay: 0.4s;">
+                <p class="text-lg md:text-xl lg:text-2xl mb-6 md:mb-8 text-primary cute-font animate-fade-in-up px-4" style="animation-delay: 0.4s;">
                     "{{ class_data.motto }}"
                 </p>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-up" style="animation-delay: 0.6s;">
-                    <div class="glass-card p-6 rounded-2xl hover-lift">
-                        <div class="text-4xl font-bold text-primary mb-2">{{ class_data.total_students }}</div>
-                        <div class="text-gray-300">Siswa</div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12 animate-fade-in-up px-4" style="animation-delay: 0.6s;">
+                    <div class="glass-card p-4 md:p-6 rounded-xl md:rounded-2xl hover-lift">
+                        <div class="text-3xl md:text-4xl font-bold text-primary mb-2">{{ class_data.total_students }}</div>
+                        <div class="text-sm md:text-base text-gray-300">Siswa</div>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl hover-lift">
-                        <div class="text-4xl font-bold text-secondary mb-2">{{ class_data.year }}</div>
-                        <div class="text-gray-300">Tahun Ajaran</div>
+                    <div class="glass-card p-4 md:p-6 rounded-xl md:rounded-2xl hover-lift">
+                        <div class="text-3xl md:text-4xl font-bold text-secondary mb-2">{{ class_data.year }}</div>
+                        <div class="text-sm md:text-base text-gray-300">Tahun Ajaran</div>
                     </div>
-                    <div class="glass-card p-6 rounded-2xl hover-lift">
-                        <div class="text-4xl font-bold text-accent mb-2">1</div>
-                        <div class="text-gray-300">Kelas Terkuat</div>
+                    <div class="glass-card p-4 md:p-6 rounded-xl md:rounded-2xl hover-lift">
+                        <div class="text-3xl md:text-4xl font-bold text-accent mb-2">1</div>
+                        <div class="text-sm md:text-base text-gray-300">Kelas Terkuat</div>
                     </div>
                 </div>
-                <div class="flex flex-wrap justify-center gap-4 animate-scale-in" style="animation-delay: 0.8s;">
-                    <a href="#albums" class="bg-gradient-to-r from-primary to-primary-dark px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105">
+                <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4 animate-scale-in px-4" style="animation-delay: 0.8s;">
+                    <a href="#albums" class="bg-gradient-to-r from-primary to-primary-dark px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 hover:scale-105 text-center text-sm md:text-base">
                         <i class="fas fa-images mr-2"></i>Lihat Album
                     </a>
-                    <a href="#structure" class="bg-dark-card border-2 border-primary px-8 py-4 rounded-full font-semibold hover:bg-primary hover:border-primary transition-all duration-300 hover:scale-105">
+                    <a href="#structure" class="bg-dark-card border-2 border-primary px-6 md:px-8 py-3 md:py-4 rounded-full font-semibold hover:bg-primary hover:border-primary transition-all duration-300 hover:scale-105 text-center text-sm md:text-base">
                         <i class="fas fa-sitemap mr-2"></i>Lihat Struktur
                     </a>
                 </div>
@@ -295,40 +295,40 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-dark-card/30 relative">
+    <section id="about" class="py-12 md:py-20 bg-dark-card/30 relative">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 animate-fade-in-up">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 md:mb-12 animate-fade-in-up">
                 Tentang <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas Kami</span>
             </h2>
             <div class="max-w-4xl mx-auto">
-                <div class="glass-card p-8 md:p-12 rounded-3xl animate-scale-in">
-                    <p class="text-lg md:text-xl text-gray-300 leading-relaxed text-center mb-8">
+                <div class="glass-card p-6 md:p-8 lg:p-12 rounded-2xl md:rounded-3xl animate-scale-in">
+                    <p class="text-base md:text-lg lg:text-xl text-gray-300 leading-relaxed text-center mb-6 md:mb-8">
                         {{ class_data.description }}
                     </p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                         <div class="text-center hover-lift cursor-pointer group">
-                            <div class="w-16 h-16 mx-auto mb-3 bg-primary/20 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-all">
-                                <i class="fas fa-code text-3xl text-primary"></i>
+                            <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-primary/20 rounded-full flex items-center justify-center group-hover:bg-primary/40 transition-all">
+                                <i class="fas fa-code text-2xl md:text-3xl text-primary"></i>
                             </div>
-                            <p class="text-sm text-gray-400">Coding</p>
+                            <p class="text-xs md:text-sm text-gray-400">Coding</p>
                         </div>
                         <div class="text-center hover-lift cursor-pointer group">
-                            <div class="w-16 h-16 mx-auto mb-3 bg-secondary/20 rounded-full flex items-center justify-center group-hover:bg-secondary/40 transition-all">
-                                <i class="fas fa-network-wired text-3xl text-secondary"></i>
+                            <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-secondary/20 rounded-full flex items-center justify-center group-hover:bg-secondary/40 transition-all">
+                                <i class="fas fa-network-wired text-2xl md:text-3xl text-secondary"></i>
                             </div>
-                            <p class="text-sm text-gray-400">Networking</p>
+                            <p class="text-xs md:text-sm text-gray-400">Networking</p>
                         </div>
                         <div class="text-center hover-lift cursor-pointer group">
-                            <div class="w-16 h-16 mx-auto mb-3 bg-accent/20 rounded-full flex items-center justify-center group-hover:bg-accent/40 transition-all">
-                                <i class="fas fa-users text-3xl text-accent"></i>
+                            <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-accent/20 rounded-full flex items-center justify-center group-hover:bg-accent/40 transition-all">
+                                <i class="fas fa-users text-2xl md:text-3xl text-accent"></i>
                             </div>
-                            <p class="text-sm text-gray-400">Teamwork</p>
+                            <p class="text-xs md:text-sm text-gray-400">Teamwork</p>
                         </div>
                         <div class="text-center hover-lift cursor-pointer group">
-                            <div class="w-16 h-16 mx-auto mb-3 bg-purple-400/20 rounded-full flex items-center justify-center group-hover:bg-purple-400/40 transition-all">
-                                <i class="fas fa-trophy text-3xl text-purple-400"></i>
+                            <div class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-2 md:mb-3 bg-purple-400/20 rounded-full flex items-center justify-center group-hover:bg-purple-400/40 transition-all">
+                                <i class="fas fa-trophy text-2xl md:text-3xl text-purple-400"></i>
                             </div>
-                            <p class="text-sm text-gray-400">Achievement</p>
+                            <p class="text-xs md:text-sm text-gray-400">Achievement</p>
                         </div>
                     </div>
                 </div>
@@ -337,12 +337,12 @@
     </section>
 
     <!-- Class Structure (Network Topology Style) -->
-    <section id="structure" class="py-20 relative overflow-hidden">
+    <section id="structure" class="py-12 md:py-20 relative overflow-hidden">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 animate-fade-in-up">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4 animate-fade-in-up">
                 Struktur <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
             </h2>
-            <p class="text-center text-gray-400 mb-16">Seperti topologi jaringan komputer yang terkoneksi sempurna</p>
+            <p class="text-center text-sm md:text-base text-gray-400 mb-8 md:mb-16 px-4">Seperti topologi jaringan komputer yang terkoneksi sempurna</p>
             
             <div class="max-w-6xl mx-auto">
                 <!-- Network Topology Visualization -->
@@ -431,25 +431,25 @@
     </section>
 
     <!-- Homeroom Teacher Section -->
-    <section id="teacher" class="py-20 bg-dark-card/30 relative">
+    <section id="teacher" class="py-12 md:py-20 bg-dark-card/30 relative">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 animate-fade-in-up">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-8 md:mb-12 animate-fade-in-up">
                 Wali <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
             </h2>
             <div class="max-w-4xl mx-auto">
-                <div class="glass-card p-8 md:p-12 rounded-3xl text-center animate-scale-in hover-lift">
-                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-2xl">
-                        <i class="fas fa-user-tie text-5xl text-white"></i>
+                <div class="glass-card p-6 md:p-8 lg:p-12 rounded-2xl md:rounded-3xl text-center animate-scale-in hover-lift">
+                    <div class="w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 md:mb-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center shadow-2xl">
+                        <i class="fas fa-user-tie text-4xl md:text-5xl text-white"></i>
                     </div>
-                    <h3 class="text-3xl font-bold mb-2">{{ teacher.name }}</h3>
-                    <p class="text-primary mb-4">{{ teacher.subject }}</p>
-                    <div class="max-w-2xl mx-auto mb-6">
-                        <p class="text-lg text-gray-300 italic mb-4">"{{ teacher.quote }}"</p>
-                        <p class="text-gray-400">{{ teacher.description }}</p>
+                    <h3 class="text-2xl md:text-3xl font-bold mb-2">{{ teacher.name }}</h3>
+                    <p class="text-primary mb-3 md:mb-4 text-sm md:text-base">{{ teacher.subject }}</p>
+                    <div class="max-w-2xl mx-auto mb-4 md:mb-6">
+                        <p class="text-base md:text-lg text-gray-300 italic mb-3 md:mb-4">"{{ teacher.quote }}"</p>
+                        <p class="text-sm md:text-base text-gray-400">{{ teacher.description }}</p>
                     </div>
-                    <a href="mailto:{{ teacher.email }}" class="inline-flex items-center gap-2 bg-primary/20 hover:bg-primary/30 px-6 py-3 rounded-full transition-all">
+                    <a href="mailto:{{ teacher.email }}" class="inline-flex items-center gap-2 bg-primary/20 hover:bg-primary/30 px-4 md:px-6 py-2 md:py-3 rounded-full transition-all text-sm md:text-base">
                         <i class="fas fa-envelope"></i>
-                        <span>{{ teacher.email }}</span>
+                        <span class="truncate max-w-[200px] md:max-w-none">{{ teacher.email }}</span>
                     </a>
                 </div>
             </div>
@@ -457,27 +457,24 @@
     </section>
 
     <!-- Albums Section -->
-    <section id="albums" class="py-20 relative">
+    <section id="albums" class="py-12 md:py-20 relative">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 animate-fade-in-up">
+            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4 animate-fade-in-up">
                 Album <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
             </h2>
-            <p class="text-center text-gray-400 mb-16">Kenangan indah perjalanan kami</p>
+            <p class="text-center text-sm md:text-base text-gray-400 mb-8 md:mb-16 px-4">Kenangan indah perjalanan kami dari upload user</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 {% for album_key, album in albums.items() %}
                 <a href="/album/{{ album_key }}" class="group">
-                    <div class="glass-card rounded-2xl overflow-hidden hover-lift transform transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-primary/20">
-                        <div class="relative h-64 overflow-hidden">
-                            <img src="{{ album.images[0].url }}" alt="{{ album.title }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    <div class="glass-card rounded-xl md:rounded-2xl overflow-hidden hover-lift transform transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-primary/20">
+                        <div class="relative h-48 md:h-64 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                            <i class="fas fa-images text-6xl md:text-8xl text-primary/50 group-hover:scale-110 transition-transform duration-500"></i>
                             <div class="absolute inset-0 bg-gradient-to-t from-dark-bg via-transparent to-transparent"></div>
-                            <div class="absolute top-4 right-4 bg-primary/80 px-3 py-1 rounded-full text-sm font-semibold">
-                                {{ album.images|length }} Foto
-                            </div>
                         </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{{ album.title }}</h3>
-                            <p class="text-gray-400 text-sm mb-4">{{ album.description }}</p>
+                        <div class="p-4 md:p-6">
+                            <h3 class="text-lg md:text-xl font-bold mb-2 group-hover:text-primary transition-colors">{{ album.title }}</h3>
+                            <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4 line-clamp-2">{{ album.description }}</p>
                             <div class="flex items-center justify-between">
                                 <span class="text-xs text-gray-500 uppercase tracking-wider">{{ album.category }}</span>
                                 <i class="fas fa-arrow-right text-primary group-hover:translate-x-2 transition-transform"></i>

@@ -1,12 +1,14 @@
 
 import os
-from flask import Flask, render_template, request, jsonify, redirect, url_for
+import cloudinary
+import cloudinary.uploader
+from flask import Flask, render_template, request, jsonify, redirect, url_for, flash, session
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 import logging
 from models import db, Student, Photo, Like, Comment
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-# Configure logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
@@ -15,20 +17,22 @@ app.secret_key = os.environ.get("SESSION_SECRET")
 if not app.secret_key:
     raise RuntimeError("SESSION_SECRET environment variable must be set!")
 
-# Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# File upload configuration
-UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
-
-# Initialize database
 db.init_app(app)
 
-# Data Kelas XI TJKT 1
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Silakan login terlebih dahulu'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Student.query.get(int(user_id))
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 CLASS_DATA = {
     'name': 'XI TJKT 1',
     'full_name': 'Kelas XI Teknik Jaringan Komputer dan Telekomunikasi 1',
@@ -38,7 +42,6 @@ CLASS_DATA = {
     'description': 'Kelas yang penuh semangat dalam menguasai teknologi jaringan komputer dan telekomunikasi!'
 }
 
-# Data Wali Kelas
 HOMEROOM_TEACHER = {
     'name': 'Bapak/Ibu Wali Kelas',
     'subject': 'Teknik Jaringan Komputer',
@@ -47,7 +50,6 @@ HOMEROOM_TEACHER = {
     'description': 'Guru yang berdedikasi tinggi dalam membimbing siswa-siswi XI TJKT 1'
 }
 
-# Struktur Kelas (seperti topologi jaringan)
 CLASS_STRUCTURE = {
     'core': {
         'position': 'Wali Kelas',
@@ -113,7 +115,6 @@ CLASS_STRUCTURE = {
     ]
 }
 
-# Album Kelas - Semua foto dari user upload
 ALBUMS = {
     'kegiatan': {
         'title': 'Album Kegiatan Kelas',
@@ -134,20 +135,43 @@ ALBUMS = {
 
 @app.route('/')
 def index():
-    """Main class portfolio page"""
     return render_template('index.html',
                          class_data=CLASS_DATA,
                          teacher=HOMEROOM_TEACHER,
                          structure=CLASS_STRUCTURE,
                          albums=ALBUMS)
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        nisn = request.form.get('nisn')
+        student = Student.query.filter_by(nisn=nisn).first()
+        
+        if student:
+            login_user(student)
+            flash(f'Selamat datang, {student.nickname}!', 'success')
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('index'))
+        else:
+            flash('NISN tidak ditemukan!', 'error')
+    
+    return render_template('login.html', class_data=CLASS_DATA)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Anda telah logout', 'info')
+    return redirect(url_for('index'))
+
 @app.route('/album/<album_type>')
 def album(album_type):
-    """Album pages for different categories - photos from database"""
     if album_type not in ALBUMS:
         return redirect(url_for('index'))
     
-    # Get photos from database by category
     photos = Photo.query.filter_by(category=album_type).order_by(Photo.upload_date.desc()).all()
     all_students = Student.query.all()
     
@@ -162,7 +186,6 @@ def album(album_type):
 
 @app.route('/contact', methods=['POST'])
 def contact():
-    """Handle contact form submission"""
     try:
         name = request.form.get('name') or request.json.get('name')
         email = request.form.get('email') or request.json.get('email')
@@ -188,23 +211,18 @@ def contact():
             'message': 'Terjadi kesalahan. Silakan coba lagi.'
         }), 500
 
-# Helper function for file upload
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Routes untuk Students
 @app.route('/students')
 def students():
-    """Display all students"""
     all_students = Student.query.order_by(Student.id).all()
     return render_template('students.html', 
                          students=all_students,
                          class_data=CLASS_DATA)
 
-# Routes untuk Gallery dengan Upload
 @app.route('/gallery')
 def gallery():
-    """Display photo gallery"""
     category = request.args.get('category', 'all')
     
     if category == 'all':
@@ -220,8 +238,8 @@ def gallery():
                          current_category=category)
 
 @app.route('/upload', methods=['POST'])
+@login_required
 def upload_photo():
-    """Handle photo upload"""
     try:
         if 'photo' not in request.files:
             return jsonify({'status': 'error', 'message': 'Tidak ada file yang dipilih!'}), 400
@@ -229,7 +247,6 @@ def upload_photo():
         file = request.files['photo']
         title = request.form.get('title', '')
         description = request.form.get('description', '')
-        uploader = request.form.get('uploader', 'Anonymous')
         category = request.form.get('category', 'general')
         
         if not file or file.filename == '' or file.filename is None:
@@ -238,22 +255,34 @@ def upload_photo():
         if not allowed_file(file.filename):
             return jsonify({'status': 'error', 'message': 'Format file tidak didukung! Gunakan PNG, JPG, JPEG, atau GIF'}), 400
         
-        # Generate unique filename
+        cloudinary_cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
+        cloudinary_api_key = os.environ.get('CLOUDINARY_API_KEY')
+        cloudinary_api_secret = os.environ.get('CLOUDINARY_API_SECRET')
+        
+        if not all([cloudinary_cloud_name, cloudinary_api_key, cloudinary_api_secret]):
+            return jsonify({'status': 'error', 'message': 'Cloudinary belum dikonfigurasi!'}), 500
+        
+        cloudinary.config(
+            cloud_name=cloudinary_cloud_name,
+            api_key=cloudinary_api_key,
+            api_secret=cloudinary_api_secret
+        )
+        
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-        original_filename = secure_filename(file.filename or 'photo')
-        filename = f"{timestamp}_{original_filename}"
+        public_id = f"tjkt1/{category}/{current_user.nisn}_{timestamp}"
         
-        # Save file
-        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-        file.save(filepath)
+        upload_result = cloudinary.uploader.upload(
+            file,
+            public_id=public_id,
+            folder="tjkt1_photos"
+        )
         
-        # Save to database
         photo = Photo(
-            filename=filename,
-            title=title or original_filename,
+            student_id=current_user.id,
+            cloudinary_url=upload_result['secure_url'],
+            cloudinary_public_id=upload_result['public_id'],
+            title=title or file.filename,
             description=description or '',
-            uploader_name=uploader,
             category=category
         )
         db.session.add(photo)
@@ -274,18 +303,14 @@ def upload_photo():
         }), 500
 
 @app.route('/like/<int:photo_id>', methods=['POST'])
+@login_required
 def like_photo(photo_id):
-    """Like a photo"""
     try:
-        user_name = request.json.get('user_name', 'Anonymous')
-        
         photo = Photo.query.get_or_404(photo_id)
         
-        # Check if already liked
-        existing_like = Like.query.filter_by(photo_id=photo_id, user_name=user_name).first()
+        existing_like = Like.query.filter_by(photo_id=photo_id, student_id=current_user.id).first()
         
         if existing_like:
-            # Unlike
             db.session.delete(existing_like)
             photo.likes_count = max(0, photo.likes_count - 1)
             db.session.commit()
@@ -295,8 +320,7 @@ def like_photo(photo_id):
                 'likes_count': photo.likes_count
             })
         else:
-            # Like
-            like = Like(photo_id=photo_id, user_name=user_name)
+            like = Like(photo_id=photo_id, student_id=current_user.id)
             db.session.add(like)
             photo.likes_count += 1
             db.session.commit()
@@ -315,10 +339,9 @@ def like_photo(photo_id):
         }), 500
 
 @app.route('/comment/<int:photo_id>', methods=['POST'])
+@login_required
 def add_comment(photo_id):
-    """Add comment to a photo"""
     try:
-        user_name = request.json.get('user_name', 'Anonymous')
         comment_text = request.json.get('comment', '')
         
         if not comment_text:
@@ -328,7 +351,7 @@ def add_comment(photo_id):
         
         comment = Comment(
             photo_id=photo_id,
-            user_name=user_name,
+            student_id=current_user.id,
             comment_text=comment_text
         )
         db.session.add(comment)
@@ -350,59 +373,63 @@ def add_comment(photo_id):
 
 @app.route('/comments/<int:photo_id>')
 def get_comments(photo_id):
-    """Get all comments for a photo"""
     photo = Photo.query.get_or_404(photo_id)
     comments = Comment.query.filter_by(photo_id=photo_id).order_by(Comment.created_at.desc()).all()
     return jsonify({
         'comments': [c.to_dict() for c in comments]
     })
 
-# Initialize database and seed data
+@app.route('/check_like/<int:photo_id>')
+@login_required
+def check_like(photo_id):
+    existing_like = Like.query.filter_by(photo_id=photo_id, student_id=current_user.id).first()
+    return jsonify({
+        'liked': existing_like is not None
+    })
+
 def init_db():
-    """Initialize database and add students data"""
     with app.app_context():
         db.create_all()
         
-        # Check if students already exist
         if Student.query.count() == 0:
-            # Add 31 students
             students_data = [
-                { "id": 1, "name": "Abdirrohman Maulana Sumantri", "nickname": "Rohman" },
-                { "id": 2, "name": "Abiyyu Zharif", "nickname": "Abiyyu" },
-                { "id": 3, "name": "Ahmad Fauzi", "nickname": "Fauzi" },
-                { "id": 4, "name": "Allysa Margareth Matheos", "nickname": "Allysa" },
-                { "id": 5, "name": "Andika Harsya Pratama", "nickname": "Andika" },
-                { "id": 6, "name": "Andien Qurrotu'aini", "nickname": "Andien" },
-                { "id": 7, "name": "Bintang Abdullah Dzaki Darmawan", "nickname": "Bintang" },
-                { "id": 8, "name": "Denok Estima Sari", "nickname": "Denok" },
-                { "id": 9, "name": "El Rasya Adena Putra", "nickname": "Rasya" },
-                { "id": 10, "name": "Fadliyyah Hubbah", "nickname": "Fadliyyah" },
-                { "id": 11, "name": "Fatih Nubaid Islam", "nickname": "Fatih" },
-                { "id": 12, "name": "Harumi Cahaya Hadis Saputra", "nickname": "Harumi" },
-                { "id": 13, "name": "Hizbul aulia Ananda Fahdrian", "nickname": "Hizbul" },
-                { "id": 14, "name": "Jorge Alvin Alfarezy", "nickname": "Jorge" },
-                { "id": 15, "name": "Kanza Dwi Almirani", "nickname": "Kanza" },
-                { "id": 16, "name": "Muhammad Hilmi Firjatullah Adi", "nickname": "Hilmi" },
-                { "id": 17, "name": "Muhammad Zidan Farhatan", "nickname": "Zidan" },
-                { "id": 18, "name": "Muhamad Farhan", "nickname": "Farhan" },
-                { "id": 19, "name": "Muhammad Ridho Alsyaqif", "nickname": "Ridho" },
-                { "id": 20, "name": "Nabila Carrisa Putri", "nickname": "Nabila" },
-                { "id": 21, "name": "Nadya Shafwah Ramadani", "nickname": "Nadya" },
-                { "id": 22, "name": "Putri Nayla Nuraeni", "nickname": "Nayla" },
-                { "id": 23, "name": "Raka Iqbal Fernanda", "nickname": "Raka" },
-                { "id": 24, "name": "Riangga Pratama", "nickname": "Riangga" },
-                { "id": 25, "name": "Rizky Manna'isya Naruyun", "nickname": "Rizky" },
-                { "id": 26, "name": "Rianti Mulya Sari", "nickname": "Rianti" },
-                { "id": 27, "name": "Saiful Untari Bahtiar", "nickname": "Saiful" },
-                { "id": 28, "name": "Satria dwi Novan", "nickname": "Satria" },
-                { "id": 29, "name": "Vadlan Elka Ramadhan", "nickname": "Vadlan" },
-                { "id": 30, "name": "Vadya Elka Rahmadani", "nickname": "Vadya" },
-                { "id": 31, "name": "Willy Toto Pandy", "nickname": "Willy" }
+                { "id": 1, "nisn": "0051234501", "name": "Abdirrohman Maulana Sumantri", "nickname": "Rohman" },
+                { "id": 2, "nisn": "0051234502", "name": "Abiyyu Zharif", "nickname": "Abiyyu" },
+                { "id": 3, "nisn": "0051234503", "name": "Ahmad Fauzi", "nickname": "Fauzi" },
+                { "id": 4, "nisn": "0051234504", "name": "Allysa Margareth Matheos", "nickname": "Allysa" },
+                { "id": 5, "nisn": "0051234505", "name": "Andika Harsya Pratama", "nickname": "Andika" },
+                { "id": 6, "nisn": "0051234506", "name": "Andien Qurrotu'aini", "nickname": "Andien" },
+                { "id": 7, "nisn": "0051234507", "name": "Bintang Abdullah Dzaki Darmawan", "nickname": "Bintang" },
+                { "id": 8, "nisn": "0051234508", "name": "Denok Estima Sari", "nickname": "Denok" },
+                { "id": 9, "nisn": "0051234509", "name": "El Rasya Adena Putra", "nickname": "Rasya" },
+                { "id": 10, "nisn": "0051234510", "name": "Fadliyyah Hubbah", "nickname": "Fadliyyah" },
+                { "id": 11, "nisn": "0051234511", "name": "Fatih Nubaid Islam", "nickname": "Fatih" },
+                { "id": 12, "nisn": "0051234512", "name": "Harumi Cahaya Hadis Saputra", "nickname": "Harumi" },
+                { "id": 13, "nisn": "0051234513", "name": "Hizbul aulia Ananda Fahdrian", "nickname": "Hizbul" },
+                { "id": 14, "nisn": "0051234514", "name": "Jorge Alvin Alfarezy", "nickname": "Jorge" },
+                { "id": 15, "nisn": "0051234515", "name": "Kanza Dwi Almirani", "nickname": "Kanza" },
+                { "id": 16, "nisn": "0051234516", "name": "Muhammad Hilmi Firjatullah Adi", "nickname": "Hilmi" },
+                { "id": 17, "nisn": "0051234517", "name": "Muhammad Zidan Farhatan", "nickname": "Zidan" },
+                { "id": 18, "nisn": "0051234518", "name": "Muhamad Farhan", "nickname": "Farhan" },
+                { "id": 19, "nisn": "0051234519", "name": "Muhammad Ridho Alsyaqif", "nickname": "Ridho" },
+                { "id": 20, "nisn": "0051234520", "name": "Nabila Carrisa Putri", "nickname": "Nabila" },
+                { "id": 21, "nisn": "0051234521", "name": "Nadya Shafwah Ramadani", "nickname": "Nadya" },
+                { "id": 22, "nisn": "0051234522", "name": "Putri Nayla Nuraeni", "nickname": "Nayla" },
+                { "id": 23, "nisn": "0051234523", "name": "Raka Iqbal Fernanda", "nickname": "Raka" },
+                { "id": 24, "nisn": "0051234524", "name": "Riangga Pratama", "nickname": "Riangga" },
+                { "id": 25, "nisn": "0051234525", "name": "Rizky Manna'isya Naruyun", "nickname": "Rizky" },
+                { "id": 26, "nisn": "0051234526", "name": "Rianti Mulya Sari", "nickname": "Rianti" },
+                { "id": 27, "nisn": "0051234527", "name": "Saiful Untari Bahtiar", "nickname": "Saiful" },
+                { "id": 28, "nisn": "0051234528", "name": "Satria dwi Novan", "nickname": "Satria" },
+                { "id": 29, "nisn": "0051234529", "name": "Vadlan Elka Ramadhan", "nickname": "Vadlan" },
+                { "id": 30, "nisn": "0051234530", "name": "Vadya Elka Rahmadani", "nickname": "Vadya" },
+                { "id": 31, "nisn": "0051234531", "name": "Willy Toto Pandy", "nickname": "Willy" }
             ]
             
             for student_data in students_data:
                 student = Student(
                     id=student_data['id'],
+                    nisn=student_data['nisn'],
                     name=student_data['name'],
                     nickname=student_data['nickname']
                 )

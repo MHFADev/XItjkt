@@ -409,6 +409,7 @@ def init_database():
 def import_siswa():
     try:
         import json
+        from werkzeug.security import generate_password_hash
         
         with open('siswa.json', 'r') as f:
             data_siswa = json.load(f)
@@ -434,11 +435,14 @@ def import_siswa():
             
             nisn_used.add(str(nisn))
             
+            default_password = f"{nickname.lower()}123"
+            
             student = Student(
                 id=idx,
                 nisn=str(nisn),
                 name=nama,
-                nickname=nickname
+                nickname=nickname,
+                password_hash=generate_password_hash(default_password)
             )
             db.session.add(student)
             imported += 1
@@ -449,7 +453,8 @@ def import_siswa():
             'status': 'success',
             'message': f'Berhasil import {imported} siswa ke database Railway!',
             'imported': imported,
-            'auto_generated_nisn': skipped
+            'auto_generated_nisn': skipped,
+            'note': 'Password default: nickname123 (lowercase)'
         })
     
     except Exception as e:

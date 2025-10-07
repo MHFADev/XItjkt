@@ -11,6 +11,7 @@ class Student(UserMixin, db.Model):
     nisn = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     nickname = db.Column(db.String(50), nullable=False)
+    password_hash = db.Column(db.String(256))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     
     photos = db.relationship('Photo', backref='student', lazy=True)

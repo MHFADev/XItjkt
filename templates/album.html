@@ -122,7 +122,19 @@
             <h1 class="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 {{ data.title }}
             </h1>
-            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">{{ data.description }}</p>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-6">{{ data.description }}</p>
+            
+            {% if current_user.is_authenticated %}
+            <button onclick="openUploadModal()" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:scale-105 transition-transform inline-flex items-center gap-2">
+                <i class="fas fa-upload"></i>
+                <span>Upload Foto ke Album Ini</span>
+            </button>
+            {% else %}
+            <a href="/login" class="bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:scale-105 transition-transform inline-flex items-center gap-2">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Login untuk Upload</span>
+            </a>
+            {% endif %}
         </div>
     </header>
     
@@ -193,6 +205,56 @@
         </div>
     </section>
     
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="lightbox" onclick="closeUploadModal()">
+        <div class="bg-dark-card rounded-2xl p-6 md:p-8 max-w-2xl w-full mx-4" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                    Upload Foto ke {{ data.title }}
+                </h2>
+                <button onclick="closeUploadModal()" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Pilih Foto <span class="text-red-500">*</span></label>
+                        <input type="file" id="photo-input" name="photo" accept="image/*" required 
+                               class="w-full bg-dark-bg border border-primary/30 rounded-lg px-4 py-3 focus:outline-none focus:border-primary">
+                        <p class="text-xs text-gray-500 mt-1">Min: 200KB, Max: 10MB. Format: JPG, PNG, JPEG, GIF</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Judul Foto</label>
+                        <input type="text" id="title-input" name="title" placeholder="Contoh: Praktikum Networking"
+                               class="w-full bg-dark-bg border border-primary/30 rounded-lg px-4 py-3 focus:outline-none focus:border-primary">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Deskripsi</label>
+                        <textarea id="description-input" name="description" rows="3" placeholder="Ceritakan tentang foto ini..."
+                                  class="w-full bg-dark-bg border border-primary/30 rounded-lg px-4 py-3 focus:outline-none focus:border-primary resize-none"></textarea>
+                    </div>
+                    
+                    <input type="hidden" id="category-input" name="category" value="{{ album_type }}">
+                    
+                    <div id="upload-progress" class="hidden">
+                        <div class="w-full bg-gray-700 rounded-full h-2.5">
+                            <div id="progress-bar" class="bg-gradient-to-r from-primary to-secondary h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                        <p id="progress-text" class="text-sm text-center mt-2 text-gray-400">Mengupload...</p>
+                    </div>
+                    
+                    <button type="submit" id="upload-btn" class="w-full bg-gradient-to-r from-primary to-secondary text-white px-6 py-3 rounded-lg hover:scale-105 transition-transform font-semibold">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i>Upload Foto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Lightbox -->
     <div id="lightbox" class="lightbox" onclick="closeLightbox()">
         <button class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all z-10">
@@ -226,7 +288,67 @@
         }
         
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeUploadModal();
+            }
+        });
+
+        // Upload Modal Functions
+        function openUploadModal() {
+            document.getElementById('upload-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeUploadModal() {
+            document.getElementById('upload-modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('upload-form').reset();
+            document.getElementById('upload-progress').classList.add('hidden');
+            document.getElementById('progress-bar').style.width = '0%';
+        }
+
+        // Handle Upload Form
+        document.getElementById('upload-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const uploadBtn = document.getElementById('upload-btn');
+            const progressDiv = document.getElementById('upload-progress');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+            progressDiv.classList.remove('hidden');
+            progressBar.style.width = '30%';
+            
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                progressBar.style.width = '70%';
+                const result = await response.json();
+                progressBar.style.width = '100%';
+                
+                if (result.status === 'success') {
+                    progressText.innerHTML = '<i class="fas fa-check-circle text-green-500 mr-1"></i>' + result.message;
+                    
+                    setTimeout(() => {
+                        closeUploadModal();
+                        location.reload();
+                    }, 1500);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                progressDiv.classList.add('hidden');
+                alert(error.message || 'Terjadi kesalahan saat upload!');
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="fas fa-cloud-upload-alt mr-2"></i>Upload Foto';
+            }
         });
 
         // Like photo

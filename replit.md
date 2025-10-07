@@ -2,6 +2,17 @@
 
 This is an interactive class portfolio website for XI TJKT 1 (Teknik Jaringan Komputer dan Telekomunikasi) with 31 students. The project features a photo album system where all photos are user-uploaded (no static images), with like and comment functionality. The application is fully responsive across all devices and deployment-ready for Railway platform. Students can upload photos to different categories (Kegiatan, Praktikum, Acara, Lainnya) and interact with them through likes and comments.
 
+# Recent Changes
+
+## October 7, 2025 - Enhanced Class Structure Visualization
+- Redesigned network topology with improved layout and spacing
+- Added animated SVG connection lines between nodes
+- Enhanced tooltip system with smooth animations and better styling
+- Improved responsive design for mobile devices (480px, 640px, 768px, 1024px)
+- Added border effects and hover states for network nodes
+- Implemented background grid pattern for visual appeal
+- Optimized node positioning for better symmetry (23.33% spacing)
+
 # User Preferences
 
 Preferred communication style: Simple, everyday language.

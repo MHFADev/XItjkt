@@ -66,22 +66,92 @@ body {
 /* Network Node Styling */
 .network-node {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .network-node:hover {
-    transform: scale(1.2);
+    transform: scale(1.15) translateY(-5px);
     z-index: 10;
-    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.network-node::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.5), rgba(236, 72, 153, 0.5));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.network-node:hover::before {
+    opacity: 1;
+}
+
+/* Tooltip Styling */
+.network-node[data-tooltip] {
+    position: relative;
+}
+
+.network-node[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: linear-gradient(135deg, #1e293b, #334155);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    z-index: 100;
+}
+
+.network-node[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.network-node[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    border: 6px solid transparent;
+    border-top-color: #1e293b;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+}
+
+.network-node[data-tooltip]:hover::before {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .network-line {
@@ -144,13 +214,19 @@ body {
 
 @media (max-width: 768px) {
     .network-node {
-        width: 60px;
-        height: 60px;
+        width: 70px;
+        height: 70px;
         font-size: 0.875rem;
+        border-width: 2px;
     }
     
     .network-node i {
-        font-size: 1.5rem !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .network-node[data-tooltip]::after {
+        font-size: 0.65rem;
+        padding: 6px 12px;
     }
     
     .glass-card {
@@ -176,13 +252,19 @@ body {
 
 @media (max-width: 640px) {
     .network-node {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         font-size: 0.75rem;
+        border-width: 2px;
     }
     
     .network-node i {
-        font-size: 1.25rem !important;
+        font-size: 1.1rem !important;
+    }
+    
+    .network-node[data-tooltip]::after {
+        font-size: 0.6rem;
+        padding: 5px 10px;
     }
     
     .text-4xl {
@@ -210,17 +292,23 @@ body {
 
 @media (max-width: 480px) {
     .network-node {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
         font-size: 0.65rem;
+        border-width: 2px;
     }
     
     .network-node i {
-        font-size: 1rem !important;
+        font-size: 0.9rem !important;
     }
     
     .network-node p {
         display: none;
+    }
+    
+    .network-node[data-tooltip]::after {
+        font-size: 0.55rem;
+        padding: 4px 8px;
     }
     
     #network-topology {

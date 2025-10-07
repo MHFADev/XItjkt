@@ -364,42 +364,64 @@
             <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-3 md:mb-4 animate-fade-in-up">
                 Struktur <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Kelas</span>
             </h2>
-            <p class="text-center text-sm md:text-base text-gray-400 mb-8 md:mb-16 px-4">Seperti topologi jaringan komputer yang terkoneksi sempurna</p>
+            <p class="text-center text-sm md:text-base text-gray-400 mb-8 md:mb-16 px-4">Organisasi kelas seperti topologi jaringan yang terkoneksi sempurna ⚡</p>
             
             <div class="max-w-6xl mx-auto">
                 <!-- Network Topology Visualization -->
-                <div id="network-topology" class="relative min-h-[600px] glass-card rounded-3xl p-8 mb-12">
-                    <!-- Core (Wali Kelas) -->
-                    <div class="network-node bg-gradient-to-br from-yellow-400 to-orange-500 shadow-lg" style="top: 50%; left: 50%; transform: translate(-50%, -50%);" data-tooltip="{{ structure.core.name }}">
-                        <div class="text-center">
-                            <i class="fas fa-{{ structure.core.icon }} text-3xl text-white"></i>
-                            <p class="text-xs mt-1 font-semibold text-white">Core</p>
-                        </div>
+                <div id="network-topology" class="relative min-h-[600px] md:min-h-[650px] glass-card rounded-3xl p-4 md:p-8 mb-12 overflow-hidden">
+                    <!-- Animated Background Grid -->
+                    <div class="absolute inset-0 opacity-5 pointer-events-none">
+                        <div class="absolute inset-0" style="background-image: linear-gradient(rgba(139, 92, 246, 0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.5) 1px, transparent 1px); background-size: 50px 50px;"></div>
                     </div>
                     
-                    <!-- Officers Layer -->
+                    <!-- Core (Wali Kelas) - Center -->
+                    <div class="network-node bg-gradient-to-br from-yellow-400 to-orange-500 shadow-2xl animate-pulse-slow" 
+                         style="top: 50%; left: 50%; transform: translate(-50%, -50%);" 
+                         data-tooltip="{{ structure.core.name }}">
+                        <div class="text-center relative z-10">
+                            <i class="fas fa-{{ structure.core.icon }} text-2xl md:text-3xl text-white mb-1"></i>
+                            <p class="text-xs font-bold text-white hidden md:block">CORE</p>
+                        </div>
+                        <div class="absolute inset-0 bg-white opacity-0 hover:opacity-20 rounded-full transition-opacity"></div>
+                    </div>
+                    
+                    <!-- Officers Layer - Top Arc -->
                     {% for officer in structure.officers %}
-                    <div class="network-node bg-gradient-to-br from-{{ officer.color }}-400 to-{{ officer.color }}-600 shadow-lg" 
-                         style="top: 30%; left: {{ 20 + loop.index0 * 20 }}%;" 
+                    <div class="network-node bg-gradient-to-br from-{{ officer.color }}-400 to-{{ officer.color }}-600 shadow-xl" 
+                         style="top: 20%; left: {{ 15 + loop.index0 * 23.33 }}%; transform: translateX(-50%);" 
                          data-tooltip="{{ officer.position }}: {{ officer.name }}">
-                        <div class="text-center">
-                            <i class="fas fa-{{ officer.icon }} text-2xl text-white"></i>
-                            <p class="text-xs mt-1 font-semibold text-white">{{ officer.position.split()[0] }}</p>
+                        <div class="text-center relative z-10">
+                            <i class="fas fa-{{ officer.icon }} text-xl md:text-2xl text-white mb-1"></i>
+                            <p class="text-xs font-semibold text-white hidden md:block">{{ officer.position.split()[0] }}</p>
                         </div>
+                        <div class="absolute inset-0 bg-white opacity-0 hover:opacity-20 rounded-full transition-opacity"></div>
                     </div>
                     {% endfor %}
                     
-                    <!-- Divisions Layer -->
+                    <!-- Divisions Layer - Bottom Arc -->
                     {% for division in structure.divisions %}
-                    <div class="network-node bg-gradient-to-br from-{{ division.color }}-400 to-{{ division.color }}-600 shadow-lg" 
-                         style="bottom: 15%; left: {{ 15 + loop.index0 * 20 }}%;" 
+                    <div class="network-node bg-gradient-to-br from-{{ division.color }}-400 to-{{ division.color }}-600 shadow-xl" 
+                         style="bottom: 20%; left: {{ 15 + loop.index0 * 23.33 }}%; transform: translateX(-50%);" 
                          data-tooltip="{{ division.name }}">
-                        <div class="text-center">
-                            <i class="fas fa-{{ division.icon }} text-xl text-white"></i>
-                            <p class="text-xs mt-1 font-semibold text-white">{{ division.name.split()[1] }}</p>
+                        <div class="text-center relative z-10">
+                            <i class="fas fa-{{ division.icon }} text-xl md:text-2xl text-white mb-1"></i>
+                            <p class="text-xs font-semibold text-white hidden md:block">{{ division.name.split()[1] if division.name.split()|length > 1 else division.name }}</p>
                         </div>
+                        <div class="absolute inset-0 bg-white opacity-0 hover:opacity-20 rounded-full transition-opacity"></div>
                     </div>
                     {% endfor %}
+                    
+                    <!-- Connection Lines SVG -->
+                    <svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
+                        <defs>
+                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:0.3" />
+                                <stop offset="50%" style="stop-color:#EC4899;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:0.3" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Lines will be drawn by JavaScript -->
+                    </svg>
                 </div>
                 
                 <!-- Structure Details Cards -->
@@ -574,16 +596,23 @@
             }
         }
         
-        // Network Topology Animation
-        function animateNetworkLines() {
+        // Network Topology Animation with SVG Lines
+        function drawNetworkLines() {
             const topology = document.getElementById('network-topology');
+            if (!topology) return;
+            
+            const svg = topology.querySelector('svg');
+            if (!svg) return;
+            
             const nodes = topology.querySelectorAll('.network-node');
             const core = nodes[0];
             
+            // Clear existing lines
+            const existingLines = svg.querySelectorAll('line, path');
+            existingLines.forEach(line => line.remove());
+            
+            // Draw lines from core to all other nodes
             Array.from(nodes).slice(1).forEach((node, index) => {
-                const line = document.createElement('div');
-                line.className = 'network-line';
-                
                 const coreRect = core.getBoundingClientRect();
                 const nodeRect = node.getBoundingClientRect();
                 const topologyRect = topology.getBoundingClientRect();
@@ -593,35 +622,34 @@
                 const x2 = nodeRect.left - topologyRect.left + nodeRect.width / 2;
                 const y2 = nodeRect.top - topologyRect.top + nodeRect.height / 2;
                 
-                const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-                const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                // Create animated line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', 'url(#lineGradient)');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('opacity', '0');
                 
-                line.style.width = length + 'px';
-                line.style.left = x1 + 'px';
-                line.style.top = y1 + 'px';
-                line.style.transform = `rotate(${angle}deg)`;
-                line.style.animationDelay = (index * 0.1) + 's';
+                // Add animation
+                line.style.transition = 'opacity 0.5s ease';
+                line.style.animationDelay = `${index * 0.1}s`;
                 
-                topology.appendChild(line);
+                svg.appendChild(line);
+                
+                // Fade in with delay
+                setTimeout(() => {
+                    line.setAttribute('opacity', '0.6');
+                }, index * 100);
             });
         }
         
-        // Tooltip for network nodes
-        document.querySelectorAll('.network-node').forEach(node => {
-            node.addEventListener('mouseenter', (e) => {
-                const tooltip = e.currentTarget.getAttribute('data-tooltip');
-                if (tooltip) {
-                    const tip = document.createElement('div');
-                    tip.className = 'absolute bg-dark-card text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap z-50 -top-12 left-1/2 transform -translate-x-1/2';
-                    tip.textContent = tooltip;
-                    tip.id = 'node-tooltip';
-                    e.currentTarget.appendChild(tip);
-                }
-            });
-            
-            node.addEventListener('mouseleave', () => {
-                document.getElementById('node-tooltip')?.remove();
-            });
+        // Redraw lines on window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(drawNetworkLines, 250);
         });
         
         // Initialize
@@ -634,7 +662,7 @@
             }, 1000);
             
             createParticles();
-            setTimeout(() => animateNetworkLines(), 500);
+            setTimeout(() => drawNetworkLines(), 800);
         });
         
         // Scroll animations

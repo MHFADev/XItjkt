@@ -217,13 +217,23 @@
                 <a href="#" class="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent animate-pulse-slow">
                     {{ class_data.name }}
                 </a>
-                <div class="hidden md:flex space-x-6">
+                <div class="hidden md:flex space-x-6 items-center">
                     <a href="#home" class="nav-link hover:text-primary transition-colors">Beranda</a>
                     <a href="#about" class="nav-link hover:text-primary transition-colors">Tentang</a>
                     <a href="#structure" class="nav-link hover:text-primary transition-colors">Struktur</a>
                     <a href="/students" class="nav-link hover:text-primary transition-colors">Siswa</a>
                     <a href="/gallery" class="nav-link hover:text-primary transition-colors">Galeri</a>
                     <a href="#albums" class="nav-link hover:text-primary transition-colors">Album</a>
+                    {% if current_user.is_authenticated %}
+                    <span class="text-sm text-gray-400">Hai, {{ current_user.nickname }}!</span>
+                    <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                    {% else %}
+                    <a href="/login" class="bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-lg hover:scale-105 transition-transform">
+                        <i class="fas fa-sign-in-alt mr-1"></i>Login
+                    </a>
+                    {% endif %}
                 </div>
                 <button id="mobile-menu-btn" class="md:hidden text-primary hover:scale-110 transition-transform">
                     <i class="fas fa-bars text-2xl"></i>
@@ -240,6 +250,18 @@
                 <a href="/students" class="nav-link hover:text-primary transition-colors py-2">Siswa</a>
                 <a href="/gallery" class="nav-link hover:text-primary transition-colors py-2">Galeri</a>
                 <a href="#albums" class="nav-link hover:text-primary transition-colors py-2">Album</a>
+                {% if current_user.is_authenticated %}
+                <div class="pt-2 border-t border-gray-700">
+                    <p class="text-sm text-gray-400 py-2">Hai, {{ current_user.nickname }}!</p>
+                    <a href="/logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors inline-block">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Logout
+                    </a>
+                </div>
+                {% else %}
+                <a href="/login" class="bg-gradient-to-r from-primary to-secondary px-4 py-2 rounded-lg hover:scale-105 transition-transform inline-block text-center">
+                    <i class="fas fa-sign-in-alt mr-1"></i>Login
+                </a>
+                {% endif %}
             </div>
         </div>
     </nav>

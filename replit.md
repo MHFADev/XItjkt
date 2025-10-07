@@ -55,15 +55,19 @@ The application uses:
 - **Three.js r128** - 3D graphics library
 - **GSAP 3.12.2** - Animation library
 
-## Image Hosting
-- **Unsplash API** - External image hosting for gallery content
+## Database & Storage
+- **PostgreSQL (Neon)** - Primary database for students, photos, likes, and comments
+- **Local file system** - Photo uploads stored in static/uploads directory
 
 ## Font Services
 - **Google Fonts** - Poppins font family for typography
 
 ## Python Dependencies
 - **Flask** - Web application framework
-- **Standard library modules** (os, logging) for configuration and debugging
+- **Flask-SQLAlchemy** - Database ORM
+- **Gunicorn** - WSGI HTTP server for production
+- **psycopg2-binary** - PostgreSQL adapter
+- **SendGrid** - Email service (if needed)
 
 ## Browser APIs
 - **localStorage** - Theme preference persistence

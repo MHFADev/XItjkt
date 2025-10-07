@@ -136,10 +136,21 @@ body {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .network-topology {
+        min-height: 500px !important;
+    }
+}
+
 @media (max-width: 768px) {
     .network-node {
         width: 60px;
         height: 60px;
+        font-size: 0.875rem;
+    }
+    
+    .network-node i {
+        font-size: 1.5rem !important;
     }
     
     .glass-card {
@@ -153,6 +164,14 @@ body {
     .text-7xl {
         font-size: 3rem !important;
     }
+    
+    .photo-card img {
+        height: 200px !important;
+    }
+    
+    #network-topology {
+        min-height: 450px !important;
+    }
 }
 
 @media (max-width: 640px) {
@@ -162,12 +181,66 @@ body {
         font-size: 0.75rem;
     }
     
+    .network-node i {
+        font-size: 1.25rem !important;
+    }
+    
     .text-4xl {
         font-size: 1.875rem !important;
     }
     
     .text-5xl {
         font-size: 2rem !important;
+    }
+    
+    .photo-card img {
+        height: 180px !important;
+    }
+    
+    #network-topology {
+        min-height: 400px !important;
+        padding: 1rem !important;
+    }
+    
+    .cute-badge {
+        font-size: 12px;
+        padding: 6px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .network-node {
+        width: 45px;
+        height: 45px;
+        font-size: 0.65rem;
+    }
+    
+    .network-node i {
+        font-size: 1rem !important;
+    }
+    
+    .network-node p {
+        display: none;
+    }
+    
+    #network-topology {
+        min-height: 350px !important;
+    }
+}
+
+/* Touch-friendly buttons */
+@media (hover: none) and (pointer: coarse) {
+    button, a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .hover-lift:hover {
+        transform: none;
+    }
+    
+    .hover-lift:active {
+        transform: scale(0.98);
     }
 }
 

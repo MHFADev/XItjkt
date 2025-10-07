@@ -9,7 +9,10 @@ from datetime import datetime
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
+app.secret_key = os.environ.get("SESSION_SECRET")
+
+if not app.secret_key:
+    raise RuntimeError("SESSION_SECRET environment variable must be set!")
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
@@ -302,39 +305,38 @@ def upload_photo():
         uploader = request.form.get('uploader', 'Anonymous')
         category = request.form.get('category', 'general')
         
-        if file.filename == '':
+        if not file or file.filename == '' or file.filename is None:
             return jsonify({'status': 'error', 'message': 'Tidak ada file yang dipilih!'}), 400
         
         if not allowed_file(file.filename):
             return jsonify({'status': 'error', 'message': 'Format file tidak didukung! Gunakan PNG, JPG, JPEG, atau GIF'}), 400
         
-        if file and allowed_file(file.filename):
-            # Generate unique filename
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            original_filename = secure_filename(file.filename)
-            filename = f"{timestamp}_{original_filename}"
-            
-            # Save file
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-            file.save(filepath)
-            
-            # Save to database
-            photo = Photo(
-                filename=filename,
-                title=title or original_filename,
-                description=description,
-                uploader_name=uploader,
-                category=category
-            )
-            db.session.add(photo)
-            db.session.commit()
-            
-            return jsonify({
-                'status': 'success',
-                'message': '🎉 Foto berhasil diupload!',
-                'photo': photo.to_dict()
-            })
+        # Generate unique filename
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        original_filename = secure_filename(file.filename or 'photo')
+        filename = f"{timestamp}_{original_filename}"
+        
+        # Save file
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+        file.save(filepath)
+        
+        # Save to database
+        photo = Photo(
+            filename=filename,
+            title=title or original_filename,
+            description=description or '',
+            uploader_name=uploader,
+            category=category
+        )
+        db.session.add(photo)
+        db.session.commit()
+        
+        return jsonify({
+            'status': 'success',
+            'message': '🎉 Foto berhasil diupload!',
+            'photo': photo.to_dict()
+        })
     
     except Exception as e:
         app.logger.error(f"Upload error: {str(e)}")

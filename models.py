@@ -36,6 +36,8 @@ class Photo(db.Model):
     comments = db.relationship('Comment', backref='photo', lazy=True, cascade='all, delete-orphan')
     
     def to_dict(self):
+        from sqlalchemy import select, func
+        comments_count = db.session.query(func.count(Comment.id)).filter(Comment.photo_id == self.id).scalar() or 0
         return {
             'id': self.id,
             'filename': self.filename,
@@ -45,7 +47,7 @@ class Photo(db.Model):
             'upload_date': self.upload_date.strftime('%Y-%m-%d %H:%M:%S') if self.upload_date else None,
             'category': self.category,
             'likes_count': self.likes_count,
-            'comments_count': len(self.comments)
+            'comments_count': comments_count
         }
 
 class Like(db.Model):

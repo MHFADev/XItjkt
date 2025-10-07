@@ -113,100 +113,22 @@ CLASS_STRUCTURE = {
     ]
 }
 
-# Album Kelas
+# Album Kelas - Semua foto dari user upload
 ALBUMS = {
     'kegiatan': {
         'title': 'Album Kegiatan Kelas',
         'description': 'Dokumentasi berbagai kegiatan seru dan pembelajaran kelas XI TJKT 1',
-        'category': 'activities',
-        'images': [
-            {
-                'url': 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800',
-                'title': 'Belajar Bersama',
-                'description': 'Suasana belajar yang menyenangkan di kelas',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=800',
-                'title': 'Diskusi Kelompok',
-                'description': 'Diskusi project jaringan komputer',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800',
-                'title': 'Praktikum Lab',
-                'description': 'Praktikum konfigurasi jaringan di laboratorium',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
-                'title': 'Team Building',
-                'description': 'Kegiatan team building kelas',
-                'date': '2024'
-            }
-        ]
+        'category': 'kegiatan'
     },
     'praktikum': {
         'title': 'Album Praktikum TJKT',
         'description': 'Dokumentasi praktikum teknik jaringan dan konfigurasi perangkat',
-        'category': 'practicum',
-        'images': [
-            {
-                'url': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800',
-                'title': 'Konfigurasi Router',
-                'description': 'Praktik konfigurasi router Cisco',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800',
-                'title': 'Crimping Kabel',
-                'description': 'Praktik crimping kabel UTP',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1573164713988-8665fc963095?w=800',
-                'title': 'Server Management',
-                'description': 'Maintenance dan monitoring server',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=800',
-                'title': 'Network Troubleshooting',
-                'description': 'Troubleshooting masalah jaringan',
-                'date': '2024'
-            }
-        ]
+        'category': 'praktikum'
     },
     'acara': {
         'title': 'Album Acara & Event',
         'description': 'Berbagai acara dan event yang diikuti kelas XI TJKT 1',
-        'category': 'events',
-        'images': [
-            {
-                'url': 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800',
-                'title': 'Class Gathering',
-                'description': 'Acara kumpul-kumpul kelas',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800',
-                'title': 'Kompetisi IT',
-                'description': 'Mengikuti kompetisi IT antar sekolah',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800',
-                'title': 'Study Tour',
-                'description': 'Kunjungan ke perusahaan teknologi',
-                'date': '2024'
-            },
-            {
-                'url': 'https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?w=800',
-                'title': 'Workshop',
-                'description': 'Workshop teknologi terbaru',
-                'date': '2024'
-            }
-        ]
+        'category': 'acara'
     }
 }
 
@@ -221,17 +143,21 @@ def index():
 
 @app.route('/album/<album_type>')
 def album(album_type):
-    """Album pages for different categories"""
+    """Album pages for different categories - photos from database"""
     if album_type not in ALBUMS:
-        return render_template('index.html',
-                             class_data=CLASS_DATA,
-                             teacher=HOMEROOM_TEACHER,
-                             structure=CLASS_STRUCTURE,
-                             albums=ALBUMS)
+        return redirect(url_for('index'))
+    
+    # Get photos from database by category
+    photos = Photo.query.filter_by(category=album_type).order_by(Photo.upload_date.desc()).all()
+    all_students = Student.query.all()
+    
+    album_data = ALBUMS[album_type].copy()
     
     return render_template('album.html',
                          album_type=album_type,
-                         data=ALBUMS[album_type],
+                         data=album_data,
+                         photos=photos,
+                         students=all_students,
                          class_data=CLASS_DATA)
 
 @app.route('/contact', methods=['POST'])

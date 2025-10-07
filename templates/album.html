@@ -150,8 +150,8 @@
                         <h3 class="text-lg md:text-xl font-bold mb-2">{{ photo.title }}</h3>
                         <p class="text-sm text-gray-400 mb-3">{{ photo.description }}</p>
                         <div class="flex flex-wrap items-center justify-between text-xs md:text-sm text-gray-500 gap-2">
-                            <span><i class="fas fa-user mr-1"></i>{{ photo.uploader_name }}</span>
-                            <span><i class="fas fa-calendar mr-1"></i>{{ photo.upload_date }}</span>
+                            <span><i class="fas fa-user mr-1"></i>{{ photo.student.nickname if photo.student else 'Unknown' }}</span>
+                            <span><i class="fas fa-calendar mr-1"></i>{{ photo.upload_date.strftime('%d %b %Y') if photo.upload_date else '' }}</span>
                         </div>
                         <div class="flex items-center gap-4 mt-4">
                             {% if current_user.is_authenticated %}
@@ -161,7 +161,7 @@
                             </button>
                             <button onclick="toggleComments({{ photo.id }})" class="flex items-center gap-2 text-blue-500 hover:text-blue-400 transition-colors">
                                 <i class="fas fa-comment"></i>
-                                <span id="comment-count-{{ photo.id }}">{{ photo.comments_count }}</span>
+                                <span id="comment-count-{{ photo.id }}">{{ photo.photo_comments|length }}</span>
                             </button>
                             {% else %}
                             <button onclick="location.href='/login'" class="flex items-center gap-2 text-gray-500 cursor-pointer">
@@ -170,7 +170,7 @@
                             </button>
                             <button onclick="location.href='/login'" class="flex items-center gap-2 text-gray-500 cursor-pointer">
                                 <i class="fas fa-comment"></i>
-                                <span>{{ photo.comments_count }}</span>
+                                <span>{{ photo.photo_comments|length }}</span>
                             </button>
                             {% endif %}
                         </div>

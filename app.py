@@ -43,13 +43,12 @@ CLASS_DATA = {
     'year': '2024/2025',
     'total_students': 31,
     'motto': 'Connect, Collaborate, Create',
-    'description': 'Kelas yang penuh semangat dalam menguasai teknologi jaringan komputer dan telekomunikasi!'
+    'description': 'Kelas penuh kreativitas, asik, solid'
 }
 
 HOMEROOM_TEACHER = {
     'name': 'Ibu Yola Destriana',
     'subject': 'IPAS',
-    'email': 'walikelas@example.com',
     'quote': 'Belajar dengan tekun, berkarya dengan ikhlas',
     'description': 'Guru yang berdedikasi tinggi dalam membimbing siswa-siswi XI TJKT 1',
     'photo': '/static/images/teacher.jpg'

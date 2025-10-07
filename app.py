@@ -244,6 +244,19 @@ def upload_photo():
         if not allowed_file(file.filename):
             return jsonify({'status': 'error', 'message': 'Format file tidak didukung! Gunakan PNG, JPG, JPEG, atau GIF'}), 400
         
+        file.seek(0, 2)
+        file_size = file.tell()
+        file.seek(0)
+        
+        min_size = 200 * 1024
+        max_size = 10 * 1024 * 1024
+        
+        if file_size < min_size:
+            return jsonify({'status': 'error', 'message': f'Ukuran file terlalu kecil! Minimal 200KB. File Anda: {file_size / 1024:.1f}KB'}), 400
+        
+        if file_size > max_size:
+            return jsonify({'status': 'error', 'message': f'Ukuran file terlalu besar! Maksimal 10MB. File Anda: {file_size / (1024 * 1024):.1f}MB'}), 400
+        
         cloudinary_cloud_name = os.environ.get('CLOUDINARY_CLOUD_NAME')
         cloudinary_api_key = os.environ.get('CLOUDINARY_API_KEY')
         cloudinary_api_secret = os.environ.get('CLOUDINARY_API_SECRET')

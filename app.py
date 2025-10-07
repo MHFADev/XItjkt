@@ -17,7 +17,11 @@ app.secret_key = os.environ.get("SESSION_SECRET")
 if not app.secret_key:
     raise RuntimeError("SESSION_SECRET environment variable must be set!")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+database_url = os.environ.get("DATABASE_URL")
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -387,56 +391,78 @@ def check_like(photo_id):
         'liked': existing_like is not None
     })
 
+@app.route('/init-db')
+def init_database():
+    try:
+        db.create_all()
+        return jsonify({
+            'status': 'success',
+            'message': 'Database tables created successfully!'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+@app.route('/import-siswa')
+def import_siswa():
+    try:
+        import json
+        
+        with open('siswa.json', 'r') as f:
+            data_siswa = json.load(f)
+        
+        try:
+            Student.query.delete()
+            db.session.commit()
+        except:
+            db.create_all()
+        
+        imported = 0
+        skipped = 0
+        nisn_used = set()
+        
+        for idx, siswa in enumerate(data_siswa, start=1):
+            nisn = siswa.get('nisn')
+            nama = siswa.get('nama')
+            nickname = siswa.get('nickname')
+            
+            if not nisn or nisn in nisn_used:
+                nisn = f"9{idx:09d}"
+                skipped += 1
+            
+            nisn_used.add(str(nisn))
+            
+            student = Student(
+                id=idx,
+                nisn=str(nisn),
+                name=nama,
+                nickname=nickname
+            )
+            db.session.add(student)
+            imported += 1
+        
+        db.session.commit()
+        
+        return jsonify({
+            'status': 'success',
+            'message': f'Berhasil import {imported} siswa ke database Railway!',
+            'imported': imported,
+            'auto_generated_nisn': skipped
+        })
+    
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
 def init_db():
     with app.app_context():
         db.create_all()
-        
-        if Student.query.count() == 0:
-            students_data = [
-                { "id": 1, "nisn": "0051234501", "name": "Abdirrohman Maulana Sumantri", "nickname": "Rohman" },
-                { "id": 2, "nisn": "0051234502", "name": "Abiyyu Zharif", "nickname": "Abiyyu" },
-                { "id": 3, "nisn": "0051234503", "name": "Ahmad Fauzi", "nickname": "Fauzi" },
-                { "id": 4, "nisn": "0051234504", "name": "Allysa Margareth Matheos", "nickname": "Allysa" },
-                { "id": 5, "nisn": "0051234505", "name": "Andika Harsya Pratama", "nickname": "Andika" },
-                { "id": 6, "nisn": "0051234506", "name": "Andien Qurrotu'aini", "nickname": "Andien" },
-                { "id": 7, "nisn": "0051234507", "name": "Bintang Abdullah Dzaki Darmawan", "nickname": "Bintang" },
-                { "id": 8, "nisn": "0051234508", "name": "Denok Estima Sari", "nickname": "Denok" },
-                { "id": 9, "nisn": "0051234509", "name": "El Rasya Adena Putra", "nickname": "Rasya" },
-                { "id": 10, "nisn": "0051234510", "name": "Fadliyyah Hubbah", "nickname": "Fadliyyah" },
-                { "id": 11, "nisn": "0051234511", "name": "Fatih Nubaid Islam", "nickname": "Fatih" },
-                { "id": 12, "nisn": "0051234512", "name": "Harumi Cahaya Hadis Saputra", "nickname": "Harumi" },
-                { "id": 13, "nisn": "0051234513", "name": "Hizbul aulia Ananda Fahdrian", "nickname": "Hizbul" },
-                { "id": 14, "nisn": "0051234514", "name": "Jorge Alvin Alfarezy", "nickname": "Jorge" },
-                { "id": 15, "nisn": "0051234515", "name": "Kanza Dwi Almirani", "nickname": "Kanza" },
-                { "id": 16, "nisn": "0051234516", "name": "Muhammad Hilmi Firjatullah Adi", "nickname": "Hilmi" },
-                { "id": 17, "nisn": "0051234517", "name": "Muhammad Zidan Farhatan", "nickname": "Zidan" },
-                { "id": 18, "nisn": "0051234518", "name": "Muhamad Farhan", "nickname": "Farhan" },
-                { "id": 19, "nisn": "0051234519", "name": "Muhammad Ridho Alsyaqif", "nickname": "Ridho" },
-                { "id": 20, "nisn": "0051234520", "name": "Nabila Carrisa Putri", "nickname": "Nabila" },
-                { "id": 21, "nisn": "0051234521", "name": "Nadya Shafwah Ramadani", "nickname": "Nadya" },
-                { "id": 22, "nisn": "0051234522", "name": "Putri Nayla Nuraeni", "nickname": "Nayla" },
-                { "id": 23, "nisn": "0051234523", "name": "Raka Iqbal Fernanda", "nickname": "Raka" },
-                { "id": 24, "nisn": "0051234524", "name": "Riangga Pratama", "nickname": "Riangga" },
-                { "id": 25, "nisn": "0051234525", "name": "Rizky Manna'isya Naruyun", "nickname": "Rizky" },
-                { "id": 26, "nisn": "0051234526", "name": "Rianti Mulya Sari", "nickname": "Rianti" },
-                { "id": 27, "nisn": "0051234527", "name": "Saiful Untari Bahtiar", "nickname": "Saiful" },
-                { "id": 28, "nisn": "0051234528", "name": "Satria dwi Novan", "nickname": "Satria" },
-                { "id": 29, "nisn": "0051234529", "name": "Vadlan Elka Ramadhan", "nickname": "Vadlan" },
-                { "id": 30, "nisn": "0051234530", "name": "Vadya Elka Rahmadani", "nickname": "Vadya" },
-                { "id": 31, "nisn": "0051234531", "name": "Willy Toto Pandy", "nickname": "Willy" }
-            ]
-            
-            for student_data in students_data:
-                student = Student(
-                    id=student_data['id'],
-                    nisn=student_data['nisn'],
-                    name=student_data['name'],
-                    nickname=student_data['nickname']
-                )
-                db.session.add(student)
-            
-            db.session.commit()
-            print("✅ Database initialized with 31 students!")
+        print("✅ Database tables created!")
 
 if __name__ == '__main__':
     init_db()

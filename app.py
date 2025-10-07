@@ -47,74 +47,59 @@ CLASS_DATA = {
 }
 
 HOMEROOM_TEACHER = {
-    'name': 'Bapak/Ibu Wali Kelas',
-    'subject': 'Teknik Jaringan Komputer',
+    'name': 'Ibu Yola Destriana',
+    'subject': 'IPAS',
     'email': 'walikelas@example.com',
     'quote': 'Belajar dengan tekun, berkarya dengan ikhlas',
-    'description': 'Guru yang berdedikasi tinggi dalam membimbing siswa-siswi XI TJKT 1'
+    'description': 'Guru yang berdedikasi tinggi dalam membimbing siswa-siswi XI TJKT 1',
+    'photo': '/static/images/teacher.jpg'
 }
 
 CLASS_STRUCTURE = {
     'core': {
         'position': 'Wali Kelas',
         'name': HOMEROOM_TEACHER['name'],
+        'subject': HOMEROOM_TEACHER['subject'],
         'type': 'teacher',
-        'icon': 'graduation-cap'
+        'icon': 'user',
+        'photo': HOMEROOM_TEACHER.get('photo', '')
     },
     'officers': [
         {
             'position': 'Ketua Kelas',
-            'name': 'Nama Ketua',
+            'name': 'Rizky Manna\'isya (Raja)',
             'type': 'leader',
-            'icon': 'star',
+            'icon': 'award',
             'color': 'purple'
         },
         {
-            'position': 'Wakil Ketua',
-            'name': 'Nama Wakil',
+            'position': 'Wakil Ketua Kelas',
+            'name': 'Nadya',
             'type': 'leader',
             'icon': 'shield',
             'color': 'blue'
         },
         {
             'position': 'Sekretaris',
-            'name': 'Nama Sekretaris',
+            'name': 'Vadya & Jorge',
             'type': 'admin',
-            'icon': 'book',
+            'icon': 'edit',
             'color': 'green'
         },
         {
             'position': 'Bendahara',
-            'name': 'Nama Bendahara',
+            'name': 'Hadis',
             'type': 'admin',
-            'icon': 'wallet',
+            'icon': 'dollar-sign',
             'color': 'yellow'
         }
     ],
     'divisions': [
         {
-            'name': 'Divisi Keamanan',
-            'members': ['Anggota 1', 'Anggota 2'],
-            'icon': 'lock',
-            'color': 'red'
-        },
-        {
             'name': 'Divisi Kebersihan',
-            'members': ['Anggota 3', 'Anggota 4'],
-            'icon': 'broom',
-            'color': 'cyan'
-        },
-        {
-            'name': 'Divisi Acara',
-            'members': ['Anggota 5', 'Anggota 6'],
-            'icon': 'calendar',
-            'color': 'pink'
-        },
-        {
-            'name': 'Divisi Dokumentasi',
-            'members': ['Anggota 7', 'Anggota 8'],
-            'icon': 'camera',
-            'color': 'indigo'
+            'members': ['Andika'],
+            'icon': 'trash-2',
+            'color': 'teal'
         }
     ]
 }

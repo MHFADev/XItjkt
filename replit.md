@@ -1,6 +1,6 @@
 # Overview
 
-This is a personal portfolio website for M Hilmi (MHFADEV), showcasing professional skills in web development and IT support. The portfolio features a modern, responsive design with dark/light theme support and includes dedicated gallery sections for coding projects and IT support activities. The application presents a comprehensive view of the developer's capabilities through interactive animations, 3D visual effects, and detailed project documentation.
+This is an interactive class portfolio website for XI TJKT 1 (Teknik Jaringan Komputer dan Telekomunikasi) with 31 students. The project features a photo album system where all photos are user-uploaded (no static images), with like and comment functionality. The application is fully responsive across all devices and deployment-ready for Railway platform. Students can upload photos to different categories (Kegiatan, Praktikum, Acara, Lainnya) and interact with them through likes and comments.
 
 # User Preferences
 
@@ -36,9 +36,10 @@ Key architectural decisions:
 
 ## Data Management
 The application uses:
-- **In-memory data storage** for gallery content (images, titles, descriptions)
-- **localStorage** for theme preference persistence
-- **Static assets** hosted via external CDNs (Unsplash for images)
+- **PostgreSQL database** for persistent storage (Students, Photos, Likes, Comments)
+- **File system storage** for uploaded photos (static/uploads directory)
+- **Database-driven albums** - all album photos come from user uploads, no static images
+- **Dynamic student data** - student information updates automatically when database changes
 
 ## Styling and Animation System
 - **Tailwind CSS** with custom extensions for animations and color schemes

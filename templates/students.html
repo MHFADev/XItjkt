@@ -43,6 +43,20 @@
             border-color: rgba(139, 92, 246, 0.6);
             transform: translateY(-5px);
         }
+        
+        .verified-blue {
+            color: #3b82f6;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+        
+        .verified-green {
+            color: #10b981;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
     </style>
 </head>
 <body class="bg-dark-bg text-white">
@@ -91,7 +105,14 @@
                 <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 md:mb-4 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
                     <span class="text-3xl md:text-4xl">👤</span>
                 </div>
-                <h3 class="text-lg md:text-xl font-bold mb-2 text-primary">{{ student.nickname }}</h3>
+                <h3 class="text-lg md:text-xl font-bold mb-2 text-primary">
+                    {{ student.nickname }}
+                    {% if student.nisn == '9999992025' %}
+                    <i class="fas fa-check-circle verified-blue ml-1" title="Verified User"></i>
+                    {% elif student.nisn == '0089011206' %}
+                    <i class="fas fa-check-circle verified-green ml-1" title="Ketua Kelas"></i>
+                    {% endif %}
+                </h3>
                 <p class="text-xs md:text-sm text-gray-400 line-clamp-2">{{ student.name }}</p>
                 <div class="mt-3 md:mt-4 text-xs text-gray-500">
                     <i class="fas fa-hashtag"></i> {{ student.id }}

@@ -121,6 +121,15 @@ ALBUMS = {
     }
 }
 
+def get_verification_badge(nisn):
+    if nisn == '9999992025':
+        return '<i class="fas fa-check-circle text-blue-500 ml-1 inline-block" style="animation: blink 1.5s ease-in-out infinite;" title="Verified User"></i>'
+    elif nisn == '0089011206':
+        return '<i class="fas fa-check-circle text-green-500 ml-1 inline-block" title="Ketua Kelas"></i>'
+    return ''
+
+app.jinja_env.globals.update(get_verification_badge=get_verification_badge)
+
 @app.route('/')
 def index():
     return render_template('index.html',

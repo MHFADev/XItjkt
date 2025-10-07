@@ -63,6 +63,11 @@
             max-height: 90vh;
             object-fit: contain;
         }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
     </style>
 </head>
 <body class="bg-dark-bg text-white">
@@ -150,7 +155,7 @@
                         <h3 class="text-lg md:text-xl font-bold mb-2">{{ photo.title }}</h3>
                         <p class="text-sm text-gray-400 mb-3">{{ photo.description }}</p>
                         <div class="flex flex-wrap items-center justify-between text-xs md:text-sm text-gray-500 gap-2">
-                            <span><i class="fas fa-user mr-1"></i>{{ photo.student.nickname if photo.student else 'Unknown' }}</span>
+                            <span><i class="fas fa-user mr-1"></i>{{ photo.student.nickname if photo.student else 'Unknown' }}{{ get_verification_badge(photo.student.nisn if photo.student else '') | safe }}</span>
                             <span><i class="fas fa-calendar mr-1"></i>{{ photo.upload_date.strftime('%d %b %Y') if photo.upload_date else '' }}</span>
                         </div>
                         <div class="flex items-center gap-4 mt-4">

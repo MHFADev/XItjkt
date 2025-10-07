@@ -146,13 +146,15 @@ cd <project-folder>
 ```
 
 ### 2. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
 
-Atau jika menggunakan `uv`:
+Project ini menggunakan `pyproject.toml` untuk manajemen dependencies.
+
 ```bash
+# Menggunakan uv (recommended)
 uv sync
+
+# Atau menggunakan pip
+pip install -e .
 ```
 
 ### 3. Setup Environment Variables
@@ -213,7 +215,7 @@ Aplikasi akan berjalan di `http://localhost:5000`
 ├── railway.json         # Konfigurasi Railway
 ├── Procfile            # Command untuk Railway/Heroku
 ├── runtime.txt         # Python version
-├── requirements.txt    # Python dependencies
+├── pyproject.toml     # Python dependencies & project config
 └── README.md          # Dokumentasi ini
 ```
 

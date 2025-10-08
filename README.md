@@ -370,9 +370,18 @@ Edit file `siswa.json`:
 - [ ] PWA support untuk install di mobile
 - [ ] Dark/Light theme toggle persistent
 
-## 👥 Kontributor
+## 👥 Terimakasih kepada 
+Hilmi
+Chatgpt 
+Replit
+Orang tua
+deepsek 
+cloudinary 
+Claude 
+railway 
+github 
 
-Website ini dibuat dengan ❤️ oleh dan untuk **XI TJKT 1**
+
 
 ## 📄 Lisensi
 
